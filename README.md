@@ -19,3 +19,15 @@ bidirectional, single-socket connection, so there is no need to continuously pol
 
 WebSocket is useful for applications that require efficient real time communication, like games, multiuser applications with simultaneous
 editing, chat, video conferencing, social media feeds, stock tickers, real time tracking of position and timetables.
+
+## Messurement/Analize Results
+Performance comparison of the MQTT over Websockets and MQTT without Websockets (GPRS, G2, G3 and LTE)
+
+How much slower is MQTT over Websockets?
+Is MQTT over Websockets still usable with a bad internet connection?
+
+Capture packets with Wireshark and analize them:
+ * Average packets/sec
+ * Average packet size (bytes)
+ * Bytes
+ * Average bytes/sec
