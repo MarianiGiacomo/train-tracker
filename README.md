@@ -31,3 +31,42 @@ Capture packets with Wireshark and analize them:
  * Average packet size (bytes)
  * Bytes
  * Average bytes/sec
+
+ ## Steps to run the react app
+
+ Install [node](https://nodejs.org/en/) 10.15.3, you can use [nvm](https://github.com/nvm-sh/nvm)
+
+ ```
+ $ nvm install 10.15.3 
+ ````
+ Install the dependenceis 
+
+  ```
+ $ npm install 
+ ````
+Then run the react appusing the following command 
+ ```
+ $ npm start
+ ````
+
+ Currently, the app only spits the websocket response in console log. But the json data can be passed down as props(position) to Marker component to show real time movement of the vehicle.
+
+ There are also multiple ways to construct the topic url to subscirbe digitransit server and get realtime data. One option could be to subscribe to all action inside the following [GeoJSON](http://geojson.io/#map=2/20.0/0.0) Polygon
+
+ ```javascript
+ {
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [24.9578905105, 60.1836538254],
+        [24.9646711349, 60.1836538254],
+        [24.9646711349, 60.1894146967],
+        [24.9578905105, 60.1894146967],
+        [24.9578905105, 60.1836538254]
+      ]
+    ]
+  }
+}
+```
