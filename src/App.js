@@ -10,7 +10,7 @@ class App extends Component {
   initialize = async () => {
     const { websocket } = this.state;
     await websocket.connect();
-    await websocket.subscribe();
+    await websocket.subscribe('#');
     await websocket.message();
   }
 
