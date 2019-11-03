@@ -1,9 +1,6 @@
 import mqtt from 'mqtt';
 
 const websocketHslUrl = 'wss://rata.digitraffic.fi:443/mqtt';
-// const topicUrl = '/hfp/v2/journey/ongoing/vp/bus/0020/00018/5565/1/Espoontori/#';
-// const tpurl = '/hfp/v2/journey/ongoing/vp/+/+/+/+/+/+/+/+/0/#';
-
 const trainLocations = 'train-locations/';
 
 class WebsocketClient {
@@ -23,7 +20,6 @@ class WebsocketClient {
   message = () => {
     this.client.on('message', (topic, message, packet) => {
     console.log(this.decodeMessage(message));
-    // console.log('mqtt client on massage', topic, decodeMessage(message), packet);
     });
   }
 
