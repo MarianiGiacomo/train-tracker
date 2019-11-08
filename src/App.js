@@ -1,35 +1,76 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, Marker } from 'react-leaflet';
+import { Table } from 'antd';
+import "antd/dist/antd.css";
 import WebsocketClient from './services/mqttWwebsocket';
-import { getAllTrainsByDate, getActiveTrains, getTrainLocation } from './services/rest';
+import { getAllTrainsByDate, getStationMetadata } from './services/rest';
+import { getFormattedDate, getFormattedTrains } from './helpers';
 
 class App extends Component {
   state = {
     websocket: new WebsocketClient(),
+    stationsMetadata: [],
+    date:  getFormattedDate(new Date),
+    trains: [],
   };
   
   initialize = async () => {
-    const { websocket } = this.state;
+    const { websocket, date } = this.state;
     await websocket.connect();
-    await websocket.subscribe('#');
-    await websocket.message();
-    getAllTrainsByDate('2019-11-03');
-    const activeTrains = await getActiveTrains('HKI');
-    getTrainLocation(activeTrains[1].trainNumber);
+    // await websocket.subscribe('#');
+    // await websocket.message();
+    const trains = await getAllTrainsByDate(date);
+    const stationMetadata = await getStationMetadata();
+    this.setState({ stationMetadata: stationMetadata, trains: trains});
   }
 
-  componentDidMount = () =>{
-    this.initialize();
+  componentDidMount = async () =>{
+    await this.initialize(); 
   }
 
   render = () => {
+    const { stationMetadata, trains } = this.state;
     const center = {
       lat: 60.18471605086973,
       lng: 24.825582504272464,
     };
     const zoom = 13;
-    // const url = 'https://cdn.digitransit.fi/map/v1/{id}/{z}/{x}/{y}.png';
+    const dataSource = getFormattedTrains( trains, stationMetadata);    
+    const columns = [
+      {
+        title: 'Train Numner',
+        dataIndex: 'trainNumber',
+        key: 'trainNumber',
+      },
+      {
+        title: 'Departure Station',
+        dataIndex: 'departureStation',
+        key: 'departureStation'
+      },
+      {
+        title: 'Departure Time',
+        dataIndex: 'departureTime',
+        key: 'departureTime'
+      },
+      {
+        title: 'Arrival Station',
+        dataIndex: 'arrivalStation',
+        key: 'arrivalStation'
+      },
+      {
+        title: 'Arrival Time',
+        dataIndex: 'arrivalTime',
+        key: 'arrivalTime'
+      }
+    ];
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      },
+    };
+    
     return (
+      <>
       <Map
         center={ center }
         zoom={ zoom }
@@ -44,6 +85,8 @@ class App extends Component {
           position={center}
         />
       </Map>
+      <Table rowSelection={rowSelection} dataSource={dataSource} columns={columns}/>
+      </>
     );
   }
 }

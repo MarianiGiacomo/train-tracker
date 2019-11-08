@@ -21,3 +21,9 @@ export const getTrainLocation = async (train) => {
   console.log('Train location', response.data);
   return response.data;
 }
+
+// List of all stations. Needed to map station short code to station full name 
+export const getStationMetadata = async () => {
+  const response = await axios.get(baseUrl + '/metadata/stations');
+  return response.data;
+}
