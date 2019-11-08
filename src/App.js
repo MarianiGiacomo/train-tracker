@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, Marker } from 'react-leaflet';
-import WebsocketClient from './mqttWwebsocket';
+import WebsocketClient from './services/mqttWwebsocket';
+import { getAllTrainsByDate, getActiveTrains, getTrainLocation } from './services/rest';
 
 class App extends Component {
   state = {
@@ -12,6 +13,9 @@ class App extends Component {
     await websocket.connect();
     await websocket.subscribe('#');
     await websocket.message();
+    getAllTrainsByDate('2019-11-03');
+    const activeTrains = await getActiveTrains('HKI');
+    getTrainLocation(activeTrains[1].trainNumber);
   }
 
   componentDidMount = () =>{
