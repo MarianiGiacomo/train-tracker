@@ -17,13 +17,23 @@ export const getActiveTrains = async (station) => {
 
 // Returns the latest location of the given train number
 export const getTrainLocation = async (train) => {
-  const response = await axios.get(baseUrl + '/train-locations/latest/' + train);
+  const response = await axios.get(baseUrl + '' +
+      'train-locations/latest/' + train);
   console.log('Train location', response.data);
   return response.data;
 }
 
 // List of all stations. Needed to map station short code to station full name 
 export const getStationMetadata = async () => {
-  const response = await axios.get(baseUrl + '/metadata/stations');
+q  const response = await axios.get(baseUrl + '/metadata/stations');
   return response.data;
+}
+
+
+// Returns the train locations of the latestes trains within a bounding box
+export const getTrainLocationsWithinBoundingBox = async (bounding_box) => {
+    const response = await axios.get(baseUrl + 'train-locations/latest?' + bounding_box);
+    console.log('Send rest api request', baseUrl + 'train-locations/latest?' + bounding_box);
+    console.log('Train locations withing bounding box', response.data);
+    return response.data;
 }
