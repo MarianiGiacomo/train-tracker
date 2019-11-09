@@ -77,6 +77,12 @@ class VehicleTrackerRest extends Component {
     ];
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
+          if (selectedRows[0] !== undefined && selectedRows[0] !== this.state.selectedTrain) {
+              this.setState({
+                  selectedTrain: selectedRows[0].trainNumber,
+              });
+          }
+          debugger;
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       },
     };
