@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import { Table } from 'antd';
 import "antd/dist/antd.css";
-import { getAllTrainsByDate, getStationMetadata } from '../services/rest';
+import {getAllTrainsByDate, getStationMetadata, getTrainLocation} from '../services/rest';
 import { getFormattedDate, getFormattedTrains } from '../utils/helpers';
 
 class VehicleTrackerRest extends Component {
@@ -10,6 +10,9 @@ class VehicleTrackerRest extends Component {
     stationsMetadata: [],
     date:  getFormattedDate(new Date()),
     trains: [],
+    selectedTrain: 28,
+    latitude: 60.18471605086973,
+    longitude: 24.825582504272464,
   };
   
   initialize = async () => {
@@ -23,11 +26,25 @@ class VehicleTrackerRest extends Component {
     await this.initialize(); 
   }
 
+  componentDidUpdate = async() =>{
+      setInterval(async function () {
+          getTrainLocation(this.state.selectedTrain).then(response => {
+              if (response[0] !== undefined){
+                  this.setState({
+                      latitude: response[0].location.coordinates[1],
+                      longitude: response[0].location.coordinates[0],
+                  })
+              }
+              //console.log("set train position to: " + [response[0].location.coordinates[1], response[0].location.coordinates[0]]);
+          });
+      }.bind(this), 5000)
+  }
+
   render = () => {
     const { stationMetadata, trains } = this.state;
     const center = {
-      lat: 60.18471605086973,
-      lng: 24.825582504272464,
+      lat: this.state.latitude,
+      lng: this.state.longitude,
     };
     const zoom = 13;
     const dataSource = getFormattedTrains( trains, stationMetadata);    
@@ -60,6 +77,12 @@ class VehicleTrackerRest extends Component {
     ];
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
+          if (selectedRows[0] !== undefined && selectedRows[0] !== this.state.selectedTrain) {
+              this.setState({
+                  selectedTrain: selectedRows[0].trainNumber,
+              });
+          }
+          debugger;
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       },
     };
