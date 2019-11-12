@@ -60,8 +60,8 @@ class App extends Component {
           className="vehicle-tracker-menu"
           onClick={this.onMenuItemClick}
         >
-          <Menu.Item key="rest">REST</Menu.Item>
           <Menu.Item key="wss">WebSocket</Menu.Item>
+          <Menu.Item key="rest">REST</Menu.Item>
         </Menu>
       </Header>
       <Content className="vehicle-tracker-content-wrapper">
