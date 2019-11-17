@@ -43,6 +43,7 @@ class VehicleTrackerRest extends Component {
         longitude={longitude}
         selectedTrain={selectedTrain}
         onChange={this.handleTrainSelection}
+        connectionType={'Rest'}
       />
     );
   }

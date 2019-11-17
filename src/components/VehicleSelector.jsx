@@ -4,6 +4,7 @@ import { Table } from 'antd';
 
 import {getAllTrainsByDate, getStationMetadata } from '../services/rest';
 import { getFormattedDate, getFormattedTrains } from '../utils/helpers';
+import {selectIcon} from '../utils/icons';
 
 const DATA_HEADERS = [
   {
@@ -88,6 +89,7 @@ class VehicleSelector extends Component {
           />
           <Marker
             key="key"
+            icon = {selectIcon(this.props["connectionType"])}
             position={center}
           />
         </Map>
