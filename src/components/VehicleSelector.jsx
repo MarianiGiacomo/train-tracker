@@ -41,7 +41,7 @@ class VehicleSelector extends Component {
   }
 
   componentDidMount = async () => {
-    const date = getFormattedDate(new Date()); 
+    const date = getFormattedDate(new Date());
     const trains = await getAllTrainsByDate(date);
     const stationMetadata = await getStationMetadata();
 
@@ -53,15 +53,12 @@ class VehicleSelector extends Component {
 
   rowSelectionHandler = (selectedRowKeys, selectedRows) => {
     const { selectedTrain, onChange } = this.props;
-
     if (selectedRows[0] !== undefined && selectedRows[0] !== selectedTrain) {
-      onChange(selectedRows[0].trainNumber);  
+      onChange(selectedRows[0].trainNumber);
     }
 
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   };
-
- 
 
   render = () => {
     const { latitude, longitude } = this.props;
@@ -71,9 +68,10 @@ class VehicleSelector extends Component {
       lng: longitude,
     };
     const zoom = 13;
-    const dataSource = getFormattedTrains(trains, stationMetadata);    
+    const dataSource = getFormattedTrains(trains, stationMetadata);
     const rowSelection = {
-      onChange: this.rowSelectionHandler
+      onChange: this.rowSelectionHandler,
+      type: 'radio'
     };
 
     return (
@@ -97,7 +95,7 @@ class VehicleSelector extends Component {
       </>
     );
   }
-  
+
 }
 
 export default VehicleSelector;
