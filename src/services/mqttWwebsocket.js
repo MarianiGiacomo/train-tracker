@@ -7,20 +7,22 @@ class WebsocketClient {
 
   connect = async () => {
     this.client = mqtt.connect(websocketHslUrl);
-    console.log('mqtt connected:', websocketHslUrl);
   };
 
-  subscribe = (date) => {
-    this.client.subscribe(trainLocations + date);
-    console.log('mqtt client subscribed:', trainLocations);
+  subscribe = (topic) => {
+    this.client.subscribe(trainLocations + topic);
   }
 
-  decodeMessage = message => new TextDecoder("utf-8").decode(message);
+  decodeMessage = message => JSON.parse(new TextDecoder("utf-8").decode(message));
 
-  message = () => {
+  message = (callBack) => {
+    let wssMessage = '';
+    
     this.client.on('message', (topic, message, packet) => {
-    console.log(this.decodeMessage(message));
+      callBack(this.decodeMessage(message));
     });
+
+    return wssMessage;
   }
 
   close = () => this.client.end();
