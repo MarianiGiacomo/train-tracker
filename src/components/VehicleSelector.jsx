@@ -56,8 +56,6 @@ class VehicleSelector extends Component {
     if (selectedRows[0] !== undefined && selectedRows[0] !== selectedTrain) {
       onChange(selectedRows[0].trainNumber);
     }
-
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   };
 
   render = () => {

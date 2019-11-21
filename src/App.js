@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Layout, Menu } from 'antd';
 
-import WebsocketClient from './services/mqttWwebsocket';
 import VehicleTrackerRest from './components/VehicleTrackerRest';
+import VehicleTrackerWss from './components/VehicleTrackerWss';
 
 import './App.css';
 
@@ -10,21 +10,8 @@ const { Header, Content, Footer } = Layout;
 
 class App extends Component {
   state = {
-    websocket: new WebsocketClient(),
     selectedMenu: 'rest',
   };
-  
-  initialize = async () => {
-    // TODO: move out wss related implementation to it's own component
-    const { websocket } = this.state;
-    await websocket.connect();
-    // await websocket.subscribe('#');
-    // await websocket.message();
-  }
-
-  componentDidMount = async () => {
-    await this.initialize(); 
-  }
 
   onMenuItemClick = (e) => {
     this.setState({
@@ -39,9 +26,7 @@ class App extends Component {
       case 'rest':
         return <VehicleTrackerRest />
       case 'wss': 
-        // TODO: call wss vehicle tracker component here 
-        // when it's implemented
-        return ('WSS vehicle tracker')
+        return <VehicleTrackerWss />
       default: 
         return <VehicleTrackerRest />
     }
