@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd';
 
 import VehicleTrackerRest from './components/VehicleTrackerRest';
 import VehicleTrackerWss from './components/VehicleTrackerWss';
+import VehicleTrackerWsRest from './components/VehicleTrackerWsRest';
 
 import './App.css';
 
@@ -10,7 +11,7 @@ const { Header, Content, Footer } = Layout;
 
 class App extends Component {
   state = {
-    selectedMenu: 'rest',
+    selectedMenu: 'wss',
   };
 
   onMenuItemClick = (e) => {
@@ -27,8 +28,10 @@ class App extends Component {
         return <VehicleTrackerRest />
       case 'wss': 
         return <VehicleTrackerWss />
+      case 'wss-rest':
+        return <VehicleTrackerWsRest />
       default: 
-        return <VehicleTrackerRest />
+        return <VehicleTrackerWss />
     }
   }
 
@@ -41,12 +44,13 @@ class App extends Component {
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['rest']}
+          defaultSelectedKeys={['wss']}
           className="vehicle-tracker-menu"
           onClick={this.onMenuItemClick}
         >
           <Menu.Item key="wss">WebSocket</Menu.Item>
           <Menu.Item key="rest">REST</Menu.Item>
+          <Menu.Item key="wss-rest">WS & REST</Menu.Item>
         </Menu>
       </Header>
       <Content className="vehicle-tracker-content-wrapper">

@@ -15,14 +15,11 @@ class VehicleTrackerRest extends Component {
     await this.updateMap(selectedTrain);
     const updateIntervalId = setInterval( async () => {
       this.updateMap(selectedTrain)}, 15000);
-    console.log('updateIntervalId', updateIntervalId)
     this.setState({ updateIntervalId: updateIntervalId });
   }
 
   updateMap = async (selectedTrain) => {
     const trainLocation = await getTrainLocation(selectedTrain)
-    console.log('selectedTrain', selectedTrain)
-    console.log('location', trainLocation[0])
     if (trainLocation[0] !== undefined){
       const coordinates = trainLocation[0].location.coordinates
       this.setState({
@@ -60,11 +57,10 @@ class VehicleTrackerRest extends Component {
 
     return (
       <VehicleSelector
-        latitude={latitude}
-        longitude={longitude}
+        coordinatesRest={{ lat: latitude, lng: longitude }}
         selectedTrain={selectedTrain}
         onChange={this.handleTrainSelection}
-        connectionType={'Rest'}
+        style={{height:500, width: '100%'}}
       />
     );
   }
