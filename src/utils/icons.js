@@ -29,7 +29,7 @@ export function selectIcon(connectionType){
     if (connectionType === 'Rest'){
         return restIcon
     }
-    if (connectionType === 'Websockets'){
+    if (connectionType === 'WebSocket'){
         return websocketsIcon
     }
     return trainIcon;

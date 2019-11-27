@@ -1,0 +1,7 @@
+.StatTableDiv {
+  display: 'inline';
+  float: right;
+  width: 50%;
+  height: 500;
+  padding: 10px;
+}

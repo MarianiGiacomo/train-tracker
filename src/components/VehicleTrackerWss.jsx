@@ -61,10 +61,10 @@ class VehicleTrackerWss extends Component {
     
     return (
       <VehicleSelector 
-        latitude={latitude}
-        longitude={longitude}
+        coordinatesWs={{ lat: latitude, lng: longitude }}
         selectedTrain={selectedTrain}
         onChange={this.handleTrainSelection}
+        style={{height:500, width: '100%'}}
       />
     );
   }
