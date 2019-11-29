@@ -44,8 +44,7 @@ class VehicleTrackerWss extends Component {
   }
 
   componentDidUpdate = async (prevProps, prevState) => {
-    const { websocket, selectedTrain, topic } = this.state;
-
+    const { websocket, selectedTrain } = this.state;
 
     if (prevState.selectedTrain !== selectedTrain) {
         websocket.close();
