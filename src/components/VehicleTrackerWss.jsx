@@ -25,6 +25,11 @@ class VehicleTrackerWss extends Component {
     await this.initialize();
   }
 
+  componentWillUnmount = async () => {
+    const { websocket } = this.state;
+    websocket.close();
+  }
+
   trackTrain = (message) => {
     if (!message) return;
     
@@ -38,11 +43,13 @@ class VehicleTrackerWss extends Component {
     }
   }
 
-  componentDidUpdate = async (prevState) => {
-    const { websocket, selectedTrain } = this.state;
+  componentDidUpdate = async (prevProps, prevState) => {
+    const { websocket, selectedTrain, topic } = this.state;
+
 
     if (prevState.selectedTrain !== selectedTrain) {
-      await this.initialize();
+        websocket.close();
+        await this.initialize();
     }
 
     websocket.message((message) => this.trackTrain(message));
