@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import VehicleSelector from './VehicleSelector';
 import WebSocket from '../services/mqttWwebsocket';
 import { getFormattedDate } from '../utils/helpers';
+import {getTrainLocation} from '../services/rest';
 
 class VehicleTrackerWsRest extends Component {
   state = { 
@@ -11,6 +12,7 @@ class VehicleTrackerWsRest extends Component {
     latitudeREST: 60.18471605086973,
     longitudeREST: 24.825582504272464,
     websocket: new WebSocket(),
+    updateIntervalId: null,
   }
 
   initialize = async () => {
@@ -22,7 +24,7 @@ class VehicleTrackerWsRest extends Component {
       websocket.subscribe(topic)
   }
 
-  trackTrain = (message) => {
+  trackTrainWS = (message) => {
     if (!message) return;
 
     const { location: { coordinates } } = message || undefined;
@@ -35,24 +37,46 @@ class VehicleTrackerWsRest extends Component {
     }
   }
 
+  trackTrainREST = async (selectedTrain) => {
+    await this.updateMap(selectedTrain);
+    const updateIntervalId = setInterval( async () => {
+      this.updateMap(selectedTrain)}, 15000);
+    this.setState({ updateIntervalId: updateIntervalId });
+  }
+
+  updateMap = async (selectedTrain) => {
+    const trainLocation = await getTrainLocation(selectedTrain)
+    if (trainLocation[0] !== undefined){
+      const coordinates = trainLocation[0].location.coordinates
+      this.setState({
+          latitudeREST: coordinates[1],
+          longitudeREST: coordinates[0],
+        }
+      )}
+  }
   componentDidMount = async () => {
       await this.initialize();
   }
 
   componentDidUpdate = async (prevProps, prevState) => {
-    const { websocket, selectedTrain } = this.state;
+    const { websocket, selectedTrain, updateIntervalId } = this.state;
 
     if (prevState.selectedTrain !== selectedTrain) {
+      clearInterval(updateIntervalId);
+      this.trackTrainREST(selectedTrain);
+
       websocket.close();
       await this.initialize();
     }
 
-    websocket.message((message) => this.trackTrain(message));
+    websocket.message((message) => this.trackTrainWS(message));
   }
 
   componentWillUnmount = async () => {
     const { websocket } = this.state;
     websocket.close();
+
+    clearInterval(this.state.updateIntervalId);
   }
 
   handleTrainSelection = (currentSelectedTrain) => {
