@@ -16,13 +16,9 @@ class WebsocketClient {
   decodeMessage = message => JSON.parse(new TextDecoder("utf-8").decode(message));
 
   message = (callBack) => {
-    let wssMessage = '';
-    
     this.client.on('message', (topic, message, packet) => {
       callBack(this.decodeMessage(message));
     });
-
-    return wssMessage;
   }
 
   close = () => this.client.end();
