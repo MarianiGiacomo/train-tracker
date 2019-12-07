@@ -49,9 +49,8 @@ class VehicleTrackerWss extends Component {
     if (prevState.selectedTrain !== selectedTrain) {
         websocket.close();
         await this.initialize();
+        websocket.message((message) => this.trackTrain(message));
     }
-
-    websocket.message((message) => this.trackTrain(message));
   }
 
   handleTrainSelection = (currentSelectedTrain) => {

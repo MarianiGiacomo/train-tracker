@@ -64,12 +64,10 @@ class VehicleTrackerWsRest extends Component {
     if (prevState.selectedTrain !== selectedTrain) {
       clearInterval(updateIntervalId);
       this.trackTrainREST(selectedTrain);
-
       websocket.close();
       await this.initialize();
+      websocket.message((message) => this.trackTrainWS(message));
     }
-
-    websocket.message((message) => this.trackTrainWS(message));
   }
 
   componentWillUnmount = async () => {

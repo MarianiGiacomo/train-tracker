@@ -1,5 +1,6 @@
 import L from "leaflet";
-// hsl icons can be found here: https://reittiopas.hsl.fi/styleguide
+import wsIconImage from '../images/ws.png';
+import restIconImage from '../images/REST.png';
 
 const trainIcon = L.icon({
     iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/18/Aiga_railtransportation.png',
@@ -10,15 +11,14 @@ const trainIcon = L.icon({
 });
 
 const restIcon = L.icon({
-    iconUrl: 'https://restfulapi.net/wp-content/uploads/rest.png',
-
+    iconUrl: restIconImage,
     iconSize:     [30, 30],
     iconAnchor:   [15, 15],
     popupAnchor:  [-3, -76]
 });
 
 const websocketsIcon = L.icon({
-    iconUrl: 'http://www.techbysample.com/wp-content/uploads/2017/03/websocket-1.png',
+    iconUrl: wsIconImage,
 
     iconSize:     [40, 30],
     iconAnchor:   [20, 15],
