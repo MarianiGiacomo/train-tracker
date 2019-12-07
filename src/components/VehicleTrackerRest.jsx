@@ -20,8 +20,8 @@ class VehicleTrackerRest extends Component {
 
   updateMap = async (selectedTrain) => {
     const trainLocation = await getTrainLocation(selectedTrain)
-    if (trainLocation[0] !== undefined){
-      const coordinates = trainLocation[0].location.coordinates
+    if (trainLocation.data[0] !== undefined){
+      const coordinates = trainLocation.data[0].location.coordinates
       this.setState({
           latitude: coordinates[1],
           longitude: coordinates[0],

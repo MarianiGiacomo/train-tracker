@@ -11,6 +11,11 @@ class VehicleTrackerWsRest extends Component {
     longitudeWS: 24.825582504272464,
     latitudeREST: 60.18471605086973,
     longitudeREST: 24.825582504272464,
+    packetSizeREST: null,
+    packetSizeWS: null,
+    responseTimeREST: null,
+    responseTimeWS: null,
+    sendDateWS: null,
     websocket: new WebSocket(),
     updateIntervalId: null,
   }
@@ -20,19 +25,28 @@ class VehicleTrackerWsRest extends Component {
       const { websocket, selectedTrain } = this.state;
       const topic = `${date}/${selectedTrain}`;
 
+      var sendDateWS = (new Date()).getTime();
       await websocket.connect();
       websocket.subscribe(topic)
+      this.setState({
+        sendDateWS: sendDateWS
+      });
   }
 
-  trackTrainWS = (message) => {
+  trackTrainWS = (message, size) => {
     if (!message) return;
-
+    const { sendDateWS } = this.state;
     const { location: { coordinates } } = message || undefined;
 
     if (coordinates && coordinates.length > 0) {
+      var receiveDateWS = (new Date()).getTime();
+      var responseTimeMs = receiveDateWS - sendDateWS;
       this.setState({
         longitudeWS: coordinates[0],
         latitudeWS: coordinates[1],
+        responseTimeWS: responseTimeMs,
+        packetSizeWS: size,
+        sendDateWS: (new Date()).getTime()
       });
     }
   }
@@ -45,12 +59,18 @@ class VehicleTrackerWsRest extends Component {
   }
 
   updateMap = async (selectedTrain) => {
+    var sizeof = require('object-sizeof')
+    var sendDateREST = (new Date()).getTime();
     const trainLocation = await getTrainLocation(selectedTrain)
-    if (trainLocation[0] !== undefined){
-      const coordinates = trainLocation[0].location.coordinates
+    if (trainLocation.data[0] !== undefined){
+      var receiveDateREST = (new Date()).getTime();
+      var responseTimeMs = receiveDateREST - sendDateREST;
+      const coordinates = trainLocation.data[0].location.coordinates
       this.setState({
           latitudeREST: coordinates[1],
           longitudeREST: coordinates[0],
+          responseTimeREST: responseTimeMs,
+          packetSizeREST: sizeof(trainLocation)
         }
       )}
   }
@@ -66,7 +86,7 @@ class VehicleTrackerWsRest extends Component {
       this.trackTrainREST(selectedTrain);
       websocket.close();
       await this.initialize();
-      websocket.message((message) => this.trackTrainWS(message));
+      websocket.message((message, size) => this.trackTrainWS(message, size));
     }
   }
 
@@ -85,32 +105,32 @@ class VehicleTrackerWsRest extends Component {
 
   render = ()  => {
     const {
-      latitude, longitude, selectedTrain
+      latitude, longitude, selectedTrain, responseTimeREST, responseTimeWS, packetSizeWS, packetSizeREST
     } = this.state;
 
     const testData = {
       ws: [
         {
           key: 1,
-          field: 'Some field 1',
-          value: 'Field value 1'
+          field: 'Response time',
+          value: (responseTimeWS ? responseTimeWS + ' ms' : '')
         },
         {
           key: 2,
-          field: 'Some field 2',
-          value: 'Field value 2'
+          field: 'Packet size',
+          value: packetSizeWS ? packetSizeWS + ' bytes' : ''
         }
       ],
       rest: [
         {
           key: 1,
-          field: 'Some field 1',
-          value: 'Field value 1'
+          field: 'Response time',
+          value: responseTimeREST ? responseTimeREST + ' ms' : ''
         },
         {
           key: 2,
-          field: 'Some field 2',
-          value: 'Field value 2'
+          field: 'Packet size',
+          value: packetSizeREST ? packetSizeREST + ' bytes' : ''
         }
       ]
     }

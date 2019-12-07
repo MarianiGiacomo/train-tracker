@@ -17,7 +17,8 @@ class WebsocketClient {
 
   message = (callBack) => {
     this.client.on('message', (topic, message, packet) => {
-      callBack(this.decodeMessage(message));
+      var sizeof = require('object-sizeof');
+      callBack(this.decodeMessage(message), sizeof(packet));
     });
   }
 
