@@ -103,8 +103,8 @@ class VehicleSelector extends Component {
               position={coordinatesRest}
             />: null}
           </Map>
-          {statistics? <StatisticsTable dataSource={statistics}/> : null}
         </div>
+        {statistics? <StatisticsTable dataSource={statistics}/> : null}
         <Table rowSelection={rowSelection} dataSource={dataSource} columns={DATA_HEADERS}/>
       </>
     );
