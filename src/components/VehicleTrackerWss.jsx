@@ -16,13 +16,12 @@ class VehicleTrackerWss extends Component {
     const date = getFormattedDate(new Date()); 
     const { websocket, selectedTrain } = this.state;
     const topic = `${date}/${selectedTrain}`;
-
-    await websocket.connect();
-    websocket.subscribe(topic)
+    websocket.subscribe(topic, (message, size) => this.trackTrain(message, size));
   }
 
   componentDidMount = async () => {
-    await this.initialize();
+    const { websocket } = this.state;
+    await websocket.connect();
   }
 
   componentWillUnmount = async () => {
@@ -32,9 +31,7 @@ class VehicleTrackerWss extends Component {
 
   trackTrain = (message) => {
     if (!message) return;
-    
     const { location: { coordinates } } = message || undefined;
-    
     if (coordinates && coordinates.length > 0) {
       this.setState({
         longitude: coordinates[0],
@@ -45,11 +42,10 @@ class VehicleTrackerWss extends Component {
 
   componentDidUpdate = async (prevProps, prevState) => {
     const { websocket, selectedTrain } = this.state;
-
     if (prevState.selectedTrain !== selectedTrain) {
         websocket.close();
+        await websocket.connect();
         await this.initialize();
-        websocket.message((message) => this.trackTrain(message));
     }
   }
 

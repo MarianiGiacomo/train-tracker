@@ -3,6 +3,20 @@ import { Table } from 'antd';
 
 import './StatisticsTable.css'
 
+const styleLeft = {
+  display: 'inline',
+  float: 'left',
+  width: '50%',
+  padding: 10
+}
+
+const styleRight = {
+  display: 'inline',
+  float: 'right',
+  width: '50%',
+  padding: 10
+}
+
 const StatisticsTable = props => {
   const dataSource = props.dataSource
   const DATA_HEADERS_WS = [
@@ -33,8 +47,12 @@ const StatisticsTable = props => {
 
   return (
     <div className='StatTableDiv' >
-      <Table columns={DATA_HEADERS_WS} dataSource={dataSource.ws}/>
-      <Table columns={DATA_HEADERS_REST} dataSource={dataSource.rest}/>
+      <div style={styleLeft} >
+        <Table columns={DATA_HEADERS_WS} dataSource={dataSource.ws}/>
+      </div>
+      <div style={styleRight} >
+        <Table columns={DATA_HEADERS_REST} dataSource={dataSource.rest}/>
+      </div>
     </div>
   );
 };
