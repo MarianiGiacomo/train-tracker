@@ -1,3 +1,5 @@
+import moment from 'moment-timezone'; 
+
 // Format the given date as 'YYYY-MM-DD'
 export const getFormattedDate = (date) => {
   const year = date.getFullYear();
@@ -8,6 +10,8 @@ export const getFormattedDate = (date) => {
   return `${year}-${month}-${day}`;
 }
 
+const getTimezonedDate = date => moment.tz(date, 'Europe/Helsinki').format('YYYY-MM-DD HH:mm');
+
 // Extract from full trains array the data needed for the trains table 
 export const getFormattedTrains = (trains, metadata) => {  
   const reducedTrains = trains.filter(train => train.runningCurrently).map((train, i) => {
@@ -15,9 +19,9 @@ export const getFormattedTrains = (trains, metadata) => {
       key: i,
       trainNumber: train.trainNumber,
       departureStation: getDepartureStation(train, metadata),
-      departureTime: train.timeTableRows[0].scheduledTime,
+      departureTime: getTimezonedDate(train.timeTableRows[0].scheduledTime),
       arrivalStation: getArrivalStation(train, metadata),
-      arrivalTime: train.timeTableRows[train.timeTableRows.length-1].scheduledTime,
+      arrivalTime: getTimezonedDate(train.timeTableRows[train.timeTableRows.length-1].scheduledTime),
     }
   })
   return reducedTrains;
