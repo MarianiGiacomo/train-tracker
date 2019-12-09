@@ -10,9 +10,12 @@ import './App.css';
 const { Header, Content, Footer } = Layout;
 
 class App extends Component {
-  state = {
-    selectedMenu: 'wss',
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      selectedMenu: 'wss',
+    };
+  }
 
   onMenuItemClick = (e) => {
     this.setState({
@@ -22,6 +25,7 @@ class App extends Component {
 
   renderContent = () => {
     const { selectedMenu } = this.state;
+    
 
     switch (selectedMenu) {
       case 'rest':

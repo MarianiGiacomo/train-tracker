@@ -1,32 +1,36 @@
 import React, { Component } from 'react';
 import VehicleSelector from './VehicleSelector';
-
-import WebSocket from '../services/mqttWwebsocket';
 import { getFormattedDate } from '../utils/helpers';
+import WebSocket from '../services/mqttWwebsocket';
 
 class VehicleTrackerWss extends Component {
-  state = {
-    selectedTrain: 28,
-    latitude: 60.18471605086973,
-    longitude: 24.825582504272464,
-    websocket: new WebSocket(),
-  };
+  constructor(props){
+    super(props);
+    const webSocket = new WebSocket();
+    webSocket.connect();
+    this.state = {
+      selectedTrain: null,
+      latitude: 60.18471605086973,
+      longitude: 24.825582504272464,
+      webSocket: webSocket
+    }
+  }
 
   initialize = async () => {
     const date = getFormattedDate(new Date()); 
-    const { websocket, selectedTrain } = this.state;
+    const { webSocket, selectedTrain } = this.state;
     const topic = `${date}/${selectedTrain}`;
-    websocket.subscribe(topic, (message, size) => this.trackTrain(message, size));
-  }
-
-  componentDidMount = async () => {
-    const { websocket } = this.state;
-    await websocket.connect();
+    webSocket.subscribe(topic, (message, size) => this.trackTrain(message, size));
   }
 
   componentWillUnmount = async () => {
-    const { websocket } = this.state;
-    websocket.close();
+    const { webSocket, selectedTrain } = this.state;
+    if(selectedTrain) {
+      const date = getFormattedDate(new Date()); 
+      const topic = `${date}/${selectedTrain}`;
+      webSocket.unsubscribe(topic);
+    }
+    webSocket.close();
   }
 
   trackTrain = (message) => {
@@ -40,12 +44,20 @@ class VehicleTrackerWss extends Component {
     }
   }
 
+  componentDidMount = async () => {
+    const { webSocket } = this.state
+    webSocket.message((message) => this.trackTrain(message));
+  }
+
   componentDidUpdate = async (prevProps, prevState) => {
-    const { websocket, selectedTrain } = this.state;
+    const { webSocket, selectedTrain } = this.state;
     if (prevState.selectedTrain !== selectedTrain) {
-        websocket.close();
-        await websocket.connect();
-        await this.initialize();
+      if(prevState.selectedTrain) {
+        const date = getFormattedDate(new Date()); 
+        const topic = `${date}/${prevState.selectedTrain}`;
+        webSocket.unsubscribe(topic);
+      }
+      this.initialize();
     }
   }
 
