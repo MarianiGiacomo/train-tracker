@@ -24,7 +24,7 @@ class VehicleTrackerWsRest extends Component {
     }
   }
 
-  initializeWs = async () => {
+  initializeWs = () => {
     const { webSocket, selectedTrain } = this.state;
     if (selectedTrain) {
       const date = getFormattedDate(new Date());
@@ -163,8 +163,8 @@ class VehicleTrackerWsRest extends Component {
     return (
       <div>
         <VehicleSelector
-        coordinatesWs={{ lat: latitudeWS, lng: longitudeWS }}
         coordinatesRest={{ lat: latitudeREST, lng: longitudeREST }}
+        coordinatesWs={{ lat: latitudeWS, lng: longitudeWS }}
         latitude={latitude}
         longitude={longitude}
         selectedTrain={selectedTrain}

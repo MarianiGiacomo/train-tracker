@@ -70,7 +70,7 @@ class VehicleSelector extends Component {
       mapCenter = coordinatesRest
     }
     else if(coordinatesWs && coordinatesRest) {
-      mapCenter = coordinatesWs
+      mapCenter = coordinatesRest
     }
 
     const zoom = 13;
@@ -92,15 +92,15 @@ class VehicleSelector extends Component {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
             />
-            {coordinatesWs? <Marker
-              key="key-ws"
-              icon = {selectIcon('WebSocket')}
-              position={coordinatesWs}
-            />: null}
             {coordinatesRest? <Marker
               key="key-rest"
               icon = {selectIcon('Rest')}
               position={coordinatesRest}
+            />: null}
+            {coordinatesWs? <Marker
+              key="key-ws"
+              icon = {selectIcon('WebSocket')}
+              position={coordinatesWs}
             />: null}
           </Map>
         </div>
