@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import VehicleSelector from './VehicleSelector';
-import WebSocket from '../services/mqttWwebsocket';
 import { getFormattedDate } from '../utils/helpers';
 import {getTrainLocation} from '../services/rest';
+import WebSocket from '../services/mqttWwebsocket';
 
 const sizeOf = require('object-sizeof');
 
 class VehicleTrackerWsRest extends Component {
   constructor(props){
-    super(props)
+    super(props);
+    const webSocket = new WebSocket();
+    webSocket.connect();
     this.state = { 
       selectedTrain: null,
       latitudeWS: 60.18471605086973,
       longitudeWS: 24.825582504272464,
       latitudeREST: 60.18471605086973,
       longitudeREST: 24.825582504272464,
-      websocket: new WebSocket(),
+      webSocket: webSocket,
       subscribeTime: null,
       updateIntervalId: null,
       statData: { ws: [], rest: [] }
@@ -23,11 +25,11 @@ class VehicleTrackerWsRest extends Component {
   }
 
   initializeWs = async () => {
-    const { websocket, selectedTrain } = this.state;
+    const { webSocket, selectedTrain } = this.state;
     if (selectedTrain) {
       const date = getFormattedDate(new Date());
       const topic = `${date}/${selectedTrain}`;
-      const subscribeTime = websocket.subscribe(topic, (message, size) => this.trackTrainWS(message, size));
+      const subscribeTime = webSocket.subscribe(topic, (message, size) => this.trackTrainWS(message, size));
       this.setState({
         subscribeTime: subscribeTime
       });
@@ -72,8 +74,8 @@ class VehicleTrackerWsRest extends Component {
     return statData;   
   }
 
-  trackTrainREST = async (selectedTrain) => {
-    await this.updateRest(selectedTrain);
+  trackTrainREST = (selectedTrain) => {
+    this.updateRest(selectedTrain);
     const updateIntervalId = setInterval( async () => {
       this.updateRest(selectedTrain)
     }, 15000);
@@ -113,26 +115,34 @@ class VehicleTrackerWsRest extends Component {
   }
 
   componentDidMount = async () => {
-    const { websocket } = this.state;
-    await websocket.connect();
+    const { webSocket } = this.state
+    webSocket.message((message, size) => this.trackTrainWS(message, size));
   }
 
   componentDidUpdate = async (prevProps, prevState) => {
-    const { websocket, selectedTrain, updateIntervalId } = this.state;
+    const { webSocket, selectedTrain, updateIntervalId } = this.state;
     if (prevState.selectedTrain !== selectedTrain) {
       clearInterval(updateIntervalId);
       this.setState({ statData: { ws: [], rest: [] } });
       this.trackTrainREST(selectedTrain);
-      websocket.close();
-      await websocket.connect();
+      if(prevState.selectedTrain) {
+        const date = getFormattedDate(new Date()); 
+        const topic = `${date}/${prevState.selectedTrain}`;
+        webSocket.unsubscribe(topic);
+      }
       this.initializeWs();
     }
   }
 
   componentWillUnmount = async () => {
-    const { websocket } = this.state;
-    websocket.close();
-    clearInterval(this.state.updateIntervalId);
+    const { webSocket, selectedTrain } = this.state;
+    if(selectedTrain) {
+      clearInterval(this.state.updateIntervalId);
+      const date = getFormattedDate(new Date()); 
+      const topic = `${date}/${selectedTrain}`;
+      webSocket.unsubscribe(topic);
+    }
+    webSocket.close();
   }
 
   handleTrainSelection = (currentSelectedTrain) => {
