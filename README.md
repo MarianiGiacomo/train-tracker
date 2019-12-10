@@ -1,5 +1,7 @@
 # Aalto vehicle tracker
 
+Deployed to: [https://ws-rest-train-tracking.firebaseapp.com](https://ws-rest-train-tracking.firebaseapp.com)
+
 ## Stack
 
 * Mqtt
