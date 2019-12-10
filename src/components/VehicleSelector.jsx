@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import { Table } from 'antd';
+import sizeMe from 'react-sizeme';
 
 import {getAllTrainsByDate, getStationMetadata } from '../services/rest';
 import { getFormattedDate, getFormattedTrains } from '../utils/helpers';
 import {selectIcon} from '../utils/icons';
 import StatisticsTable from './StatisticsTable';
+import './VehicleSelector.css';
 
 const DATA_HEADERS = [
   {
@@ -36,9 +38,19 @@ const DATA_HEADERS = [
 ];
 
 class VehicleSelector extends Component {
-  state = {
-    trains: [],
-    stationMetadata: [],
+  constructor(props){
+    super(props)
+    this.state = {
+      trains: [],
+      stationMetadata: [],
+    }
+  }
+
+  tableStyle = (size) => {
+    if(size.width < 400) {
+      return { fontSize: '10px' }
+    } 
+    return { fontSize: '14px' }
   }
 
   componentDidMount = async () => {
@@ -105,11 +117,15 @@ class VehicleSelector extends Component {
           </Map>
         </div>
         {statistics? <StatisticsTable dataSource={statistics}/> : null}
-        <Table rowSelection={rowSelection} dataSource={dataSource} columns={DATA_HEADERS}/>
+        <Table 
+          style={this.tableStyle(this.props.size)} 
+          rowSelection={rowSelection} 
+          dataSource={dataSource} 
+          columns={DATA_HEADERS}/>
       </>
     );
   }
 
 }
 
-export default VehicleSelector;
+export default sizeMe()(VehicleSelector);

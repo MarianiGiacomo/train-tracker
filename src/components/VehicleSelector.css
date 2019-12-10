@@ -1,0 +1,8 @@
+@media only screen and (max-width: 575px){
+  .ant-table {
+    font-size: x-small !important;
+  }
+  .ant-table-thead > tr > th, .ant-table-tbody > tr > td{
+    padding: 0 !important;
+  }
+}
