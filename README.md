@@ -1,4 +1,4 @@
-# Aalto vehicle tracker
+# WWW-Applications Course Group Project 
 
 Deployed to: [https://ws-rest-train-tracking.firebaseapp.com](https://ws-rest-train-tracking.firebaseapp.com)
 
@@ -10,9 +10,7 @@ Deployed to: [https://ws-rest-train-tracking.firebaseapp.com](https://ws-rest-tr
 
 ## Project Description
 
-We are going Digitransit's vehicle position [High-frequency positioning (HFP)](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/) API to fetch specific buses that passes by the campus premises. The app will show real time tracking of all the buses going or coming to the range of the area.
-
-Details about how to present the data will be refined when we go along the project demo.
+We are going to use Digitraffic's [train traffic interface](https://www.digitraffic.fi/rautatieliikenne/) to geolocate live trains. We will use both WebSocket and REST API.
 
 ## About WebScoket
 
@@ -23,10 +21,7 @@ WebSocket is useful for applications that require efficient real time communicat
 editing, chat, video conferencing, social media feeds, stock tickers, real time tracking of position and timetables.
 
 ## Messurement/Analize Results
-Performance comparison of the MQTT over Websockets and MQTT without Websockets (GPRS, G2, G3 and LTE)
-
-How much slower is MQTT over Websockets?
-Is MQTT over Websockets still usable with a bad internet connection?
+Performance comparison of the MQTT over Websockets against REST.
 
 Capture packets with Wireshark and analize them:
  * Average packets/sec
@@ -51,24 +46,3 @@ Then run the react appusing the following command
  $ npm start
  ````
 
- Currently, the app only spits the websocket response in console log. But the json data can be passed down as props(position) to Marker component to show real time movement of the vehicle.
-
- There are also multiple ways to construct the topic url to subscirbe digitransit server and get realtime data. One option could be to subscribe to all action inside the following [GeoJSON](http://geojson.io/#map=2/20.0/0.0) Polygon
-
- ```javascript
- {
-  "type": "Feature",
-  "geometry": {
-    "type": "Polygon",
-    "coordinates": [
-      [
-        [24.9578905105, 60.1836538254],
-        [24.9646711349, 60.1836538254],
-        [24.9646711349, 60.1894146967],
-        [24.9578905105, 60.1894146967],
-        [24.9578905105, 60.1836538254]
-      ]
-    ]
-  }
-}
-```
