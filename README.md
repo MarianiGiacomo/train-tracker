@@ -1,4 +1,4 @@
-# WWW-Applications Course Group Project 
+# WWW-Applications Course Group Project - Live Train Geolocation, WebSocket vs. HTTP-REST
 
 Deployed to: [https://ws-rest-train-tracking.firebaseapp.com](https://ws-rest-train-tracking.firebaseapp.com)
 
