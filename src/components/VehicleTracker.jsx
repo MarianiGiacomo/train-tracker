@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import VehicleSelector from './VehicleSelector';
+import React, { useState } from 'react';
+
 import { getFormattedDate } from '../utils/helpers';
 import WebSocket from '../services/mqttWwebsocket';
 
-class VehicleTrackerWss extends Component {
+
+class VehicleTracker extends Component {
   constructor(props){
     super(props);
     const webSocket = new WebSocket();
@@ -83,4 +84,4 @@ class VehicleTrackerWss extends Component {
   }
 }
 
-export default VehicleTrackerWss;
+export default VehicleTracker;

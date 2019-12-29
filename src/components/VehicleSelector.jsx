@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import { Table } from 'antd';
-import sizeMe from 'react-sizeme';
 
 import {getAllTrainsByDate, getStationMetadata } from '../services/rest';
 import { getFormattedDate, getFormattedTrains } from '../utils/helpers';
 import {selectIcon} from '../utils/icons';
-import StatisticsTable from './StatisticsTable';
 import './VehicleSelector.css';
 
 const DATA_HEADERS = [
@@ -46,12 +44,6 @@ class VehicleSelector extends Component {
     }
   }
 
-  tableStyle = (size) => {
-    if(size.width < 400) {
-      return { fontSize: '10px' }
-    } 
-    return { fontSize: '14px' }
-  }
 
   componentDidMount = async () => {
     const date = getFormattedDate(new Date());
@@ -116,9 +108,7 @@ class VehicleSelector extends Component {
             />: null}
           </Map>
         </div>
-        {statistics? <StatisticsTable dataSource={statistics}/> : null}
         <Table 
-          style={this.tableStyle(this.props.size)} 
           rowSelection={rowSelection} 
           dataSource={dataSource} 
           columns={DATA_HEADERS}/>
@@ -128,4 +118,4 @@ class VehicleSelector extends Component {
 
 }
 
-export default sizeMe()(VehicleSelector);
+export default VehicleSelector;

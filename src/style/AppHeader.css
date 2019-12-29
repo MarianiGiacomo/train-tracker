@@ -1,0 +1,8 @@
+.header {
+  margin-bottom: 5px;
+  z-index: 3000;
+  width: 100%;
+}
+.header > h2 {
+  color: aquamarine;
+}
