@@ -5,7 +5,7 @@ import AppContent from './components/AppContent';
 
 import './style/App.css';
 
-const App = (props) => {
+const App = () => {
 
   return(
     <div className='content-wrapper'>

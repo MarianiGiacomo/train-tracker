@@ -13,7 +13,7 @@ const MapComponent = props => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
         />
-        {/* <Marker icon = {icon} position={mapCenter}/> */}
+        <Marker icon = {icon} position={mapCenter}/>
       </Map>
     </div>
   );
