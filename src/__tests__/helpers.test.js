@@ -1,4 +1,4 @@
-import { getFormattedDate, getFormattedTrains } from '../../src/utils/helpers.js'
+import { getFormattedDate, getFormattedCurentlyRunningTrains } from '../../src/utils/helpers.js'
 
 const trains = [
   {
@@ -55,7 +55,7 @@ test('Return formatted date', () => {
 })
 
 test('Return formatted currently running trains', () => {
-  const result = getFormattedTrains(trains, stationsMetadata)
+  const result = getFormattedCurentlyRunningTrains(trains, stationsMetadata)
   expect(result.length).toBe(1)
   expect(result[0].trainNumber).toBe(2)
   expect(Object.keys(result[0]).length).toBe(6)

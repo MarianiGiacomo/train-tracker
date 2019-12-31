@@ -1,8 +1,10 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import {
   render,
   cleanup,
 } from '@testing-library/react';
+import store from '../store'
 
 import App from '../App'
 
@@ -17,18 +19,29 @@ console.warn = jest.fn();
 
 describe('<App />', () => {
   test('Test snapshot', () => {
-      const { container } = render(<App />);
+      const { container } = render(
+        <Provider store={store}>
+          <App />
+        </ Provider>);
       expect(container.firstChild).toMatchSnapshot();
   });
 
   test('Renders without errors or warnings', () => {
-      render(<App />);
+      render(
+        <Provider store={store}>
+          <App />
+        </ Provider>
+      );
       expect(console.error).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
   });
 
   test('Page renders the right components', () => {
-      const { getByText } = render(<App />);
+      const { getByText } = render(
+        <Provider store={store}>
+          <App />
+        </ Provider>
+      );
       expect(getByText('Train Tracker')).toBeTruthy();
   });
 })
