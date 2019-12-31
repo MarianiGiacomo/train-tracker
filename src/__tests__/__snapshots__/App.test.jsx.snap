@@ -27,7 +27,7 @@ exports[`<App /> Test snapshot 1`] = `
         <div>
           <div
             class="leaflet-container leaflet-grab leaflet-touch-drag"
-            style="height: 500px; width: 100%; position: relative;"
+            style="height: 500px; margin: 1% 20%; position: relative;"
             tabindex="0"
           >
             <div
@@ -49,8 +49,8 @@ exports[`<App /> Test snapshot 1`] = `
                       alt=""
                       class="leaflet-tile"
                       role="presentation"
-                      src="https://b.tile.openstreetmap.org/13/4660/2370.png"
-                      style="width: 256px; height: 256px; left: -236px; top: -134px;"
+                      src="https://b.tile.openstreetmap.org/15/18654/9484.png"
+                      style="width: 256px; height: 256px; left: -45px; top: -173px;"
                     />
                   </div>
                 </div>
@@ -63,7 +63,15 @@ exports[`<App /> Test snapshot 1`] = `
               />
               <div
                 class="leaflet-pane leaflet-marker-pane"
-              />
+              >
+                <img
+                  alt=""
+                  class="leaflet-marker-icon leaflet-zoom-hide leaflet-interactive"
+                  src="https://upload.wikimedia.org/wikipedia/commons/1/18/Aiga_railtransportation.png"
+                  style="margin-left: -15px; margin-top: -20px; width: 30px; height: 40px; left: 0px; top: 0px; z-index: 0;"
+                  tabindex="0"
+                />
+              </div>
               <div
                 class="leaflet-pane leaflet-tooltip-pane"
               />
@@ -162,6 +170,9 @@ exports[`<App /> Test snapshot 1`] = `
                         class=""
                       >
                         <colgroup>
+                          <col
+                            class="ant-table-selection-col"
+                          />
                           <col />
                           <col />
                           <col />
@@ -172,6 +183,22 @@ exports[`<App /> Test snapshot 1`] = `
                           class="ant-table-thead"
                         >
                           <tr>
+                            <th
+                              class="ant-table-selection-column"
+                            >
+                              <span
+                                class="ant-table-header-column"
+                              >
+                                <div>
+                                  <span
+                                    class="ant-table-column-title"
+                                  />
+                                  <span
+                                    class="ant-table-column-sorter"
+                                  />
+                                </div>
+                              </span>
+                            </th>
                             <th
                               class=""
                             >
