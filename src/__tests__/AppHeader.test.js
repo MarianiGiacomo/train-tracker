@@ -2,7 +2,6 @@ import React from 'react';
 import {
   render,
   cleanup,
-  debug
 } from '@testing-library/react';
 import { getByText } from '@testing-library/dom'
 
