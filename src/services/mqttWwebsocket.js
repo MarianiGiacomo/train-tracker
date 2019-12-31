@@ -3,26 +3,34 @@ import mqtt from 'mqtt';
 const websocketUrl = 'wss://rata.digitraffic.fi:443/mqtt';
 const trainLocations = 'train-locations/';
 
-const mqttConnectGetClient = async () => mqtt.connect(websocketUrl)
-
-const mqttSubscribe = (client, topic) => client.subscribe(trainLocations + topic)
-
-const mqttOnMessage = (client, callBack) => {
-  client.on('message', (message) => {
-    callBack(JSON.parse(new TextDecoder("utf-8").decode(message)))
-  })
+class WebSocketService {
+  connect = async () => {
+    this.client = mqtt.connect(websocketUrl)
+  }
+  
+  mqttSubscribe = (topic) => {
+    this.client.subscribe(trainLocations + topic)
+  }
+  
+  mqttOnMessage = (callBack) => {
+    console.log('mqttOnMessage');
+    this.client.on('message', (topic, message, packet) => {
+      console.log('message', message);
+      callBack(JSON.parse(new TextDecoder("utf-8").decode(message)))
+    })
+  }
+  
+  mqttUnsubscribe = (topic) => this.client.unsubscribe(trainLocations + topic)
+  
+  closeConnection = () => this.client.end()
 }
 
-const mqttUnsubscribe = (client, topic) => client.unsubscribe(trainLocations + topic)
 
-const closeConnection = (client) => client.end()
+// const webSocketService = {
+//   mqttSubscribe: mqttSubscribe,
+//   mqttOnMessage: mqttOnMessage,
+//   mqttUnsubscribe: mqttUnsubscribe,
+//   closeConnection: closeConnection
+// }
 
-const webSocketService = {
-  mqttConnectGetClient: mqttConnectGetClient,
-  mqttSubscribe: mqttSubscribe,
-  mqttOnMessage: mqttOnMessage,
-  mqttUnsubscribe: mqttUnsubscribe,
-  closeConnection: closeConnection
-}
-
-export default webSocketService;
+export default WebSocketService;

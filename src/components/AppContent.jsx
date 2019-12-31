@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
 
-import { getFormattedDate, getFormattedCurentlyRunningTrains } from '../utils/helpers';
-import restService from '../services/rest';
 import { getAllActiveTrainsByDate } from '../reducers/trainsListReducer'
-import webSocketService from '../services/mqttWwebsocket';
+import { setTrainLocation } from '../reducers/trainLocationReducer'
 import trainIcon from '../utils/icons'
 
 import MapComponent from './MapComponent'
@@ -14,11 +12,16 @@ import TrainsComponent from './TrainsComponent'
 import PropTypes from 'prop-types';
 
 const AppContent  = (props) => {
-  const [selectedTrain, setSelectedTrain] = useState({})
-  const [trainLocation, setTrainLocation] = useState({ lat: 60.170605, lng: 24.940906 })
-  const mqttClient = webSocketService.mqttConnectGetClient()
+  const { trainLocation, getAllActiveTrainsByDate, webSocket  } = props
+
+  const onGettingCoordinates = (coordinates) => {
+    setTrainLocation(coordinates)
+  }
+  webSocket.mqttOnMessage(onGettingCoordinates)
+
+  getAllActiveTrainsByDate(new Date())
+
   const mapStyle = {height:500, margin: '1% 20%'}
-  props.getAllActiveTrainsByDate(new Date())
 
   return (
     <div>
@@ -39,12 +42,19 @@ const AppContent  = (props) => {
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    trainLocation: state.trainLocation,
+    webSocket: state.webSocket
+  }
+}
 const mapDispatchToProps = {
-  getAllActiveTrainsByDate
+  getAllActiveTrainsByDate,
+  setTrainLocation
 }
 
-AppContent.propTypes = {
+// AppContent.propTypes = {
   
-};
+// };
 
-export default connect(null, mapDispatchToProps)(AppContent)
+export default connect(mapStateToProps, mapDispatchToProps)(AppContent)
