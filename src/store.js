@@ -5,13 +5,13 @@ import {
   selectedTrainReducer, 
   trainsListReducer, 
   trainLocationReducer,
-  webSocketReducer } from './reducers'
+  mqttClientReducer } from './reducers'
 
 const reducer = combineReducers({
   trains: trainsListReducer,
   selectedTrainNumber: selectedTrainReducer,
   trainLocation: trainLocationReducer,
-  webSocket: webSocketReducer
+  mqttClient: mqttClientReducer
 })
 
 const store = createStore(reducer,

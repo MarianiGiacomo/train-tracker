@@ -7,9 +7,8 @@ const selectedTrainReducer = (state = 0, action) => {
   }
 }
 
-export const setSelectedTrain = (selectedTrainNumber) => {
+export const storeSelectedTrain = (selectedTrainNumber) => {
   return async dispatch => {
-    //webSocketService.mqttSubscribe(selectedTrainNumber)
     dispatch({
       type: 'SET_TRAIN',
       data: selectedTrainNumber
