@@ -22,12 +22,9 @@ const AppContent = (props) => {
   const rowSelectionHandler = async (selectedRowKeys, selectedRows) => {
     const oldTrain = selectedTrainNumber;
     const newTrain = selectedRows[0].trainNumber;
-    const trainChanged = oldTrain !== newTrain && newTrain !== null;
-    if (trainChanged) {
-      await mqttService.changeSubscription(mqttClient, oldTrain, newTrain);
-      await props.storeSelectedTrain(newTrain);
-      updateTrainLocationOnce();
-    }
+    await mqttService.changeSubscription(mqttClient, oldTrain, newTrain);
+    await props.storeSelectedTrain(newTrain);
+    updateTrainLocationOnce();
   };
 
   const updateTrainLocationOnce = async () => {
