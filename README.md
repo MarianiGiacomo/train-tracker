@@ -1,7 +1,5 @@
 # Live Train Geolocation with WebSocket and HTTP-REST
 
-Deployed to: [https://ws-rest-train-tracking.firebaseapp.com](https://ws-rest-train-tracking.firebaseapp.com)
-
 ## Steps to run the react app
 
 Install the dependenceis 
