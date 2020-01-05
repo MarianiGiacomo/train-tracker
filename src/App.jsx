@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import AppHeader from './components/AppHeader';
@@ -6,19 +7,15 @@ import AppContent from './components/AppContent';
 
 import './style/App.css';
 
-import { getAndStoreMqttClient } from './reducers/mqttClientReducer';
 import { storeTrainLocation } from './reducers/trainLocationReducer';
 import { getAndStoreActiveTrainsByDate } from './reducers/trainsListReducer';
-import helperFunctions from './utils/helperFunctions';
 
 const App = (props) => {
-  props.getAndStoreActiveTrainsByDate(new Date());
-  props.getAndStoreMqttClient((message) => saveCoordinates(message));
+  const { getAndStoreActiveTrainsByDate } = props;
 
-  const saveCoordinates = async (message) => {
-    const coordinates = helperFunctions.extractTrainLocation(message);
-    props.storeTrainLocation(coordinates);
-  };
+  useEffect(() => {
+    getAndStoreActiveTrainsByDate(new Date());
+  }, [getAndStoreActiveTrainsByDate]);
 
   return (
     <div className="content-wrapper">
@@ -33,10 +30,17 @@ const App = (props) => {
   );
 };
 
+const mapStateToProps = (state) => ({
+  mqttClient: state.mqttClient,
+});
+
 const mapDispatchToProps = {
   getAndStoreActiveTrainsByDate,
-  getAndStoreMqttClient,
   storeTrainLocation,
 };
 
-export default connect(null, mapDispatchToProps)(App);
+App.propTypes = {
+  getAndStoreActiveTrainsByDate: PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -3,20 +3,14 @@ import mqtt from 'mqtt';
 const websocketUrl = 'wss://rata.digitraffic.fi:443/mqtt';
 const trainLocations = 'train-locations/';
 
-const getClient = async () => mqtt.connect(websocketUrl);
+const getClient = () => mqtt.connect(websocketUrl);
 
-const changeSubscription = async (client, oldTopic, newTopic) => {
-  await unsubscribe(client, oldTopic);
-  await subscribe(client, newTopic);
-};
-
-const subscribe = async (client, topic) => {
-  const response = await client.subscribe(trainLocations + topic);
-  console.log('subscribe', response.data);
+const subscribe = (client, topic) => {
+  client.subscribe(trainLocations + topic);
 };
 
 const onMessage = (client, callBack) => {
-  client.on('message', (message) => {
+  client.on('message', (topic, message, packet) => {
     callBack(JSON.parse(new TextDecoder('utf-8').decode(message)));
   });
 };
@@ -27,7 +21,6 @@ const closeConnection = (client) => client.end();
 
 const mqttService = {
   getClient,
-  changeSubscription,
   subscribe,
   onMessage,
   unsubscribe,

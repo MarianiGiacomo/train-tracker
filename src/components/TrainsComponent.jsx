@@ -54,8 +54,9 @@ const mapStateToProps = (state) => {
   return { trains: state.trains };
 };
 
-// TrainsComponent.propTypes = {
-
-// };
+TrainsComponent.propTypes = {
+  trains: PropTypes.arrayOf(PropTypes.object).isRequired,
+  rowSelectionHandler: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, null)(TrainsComponent);

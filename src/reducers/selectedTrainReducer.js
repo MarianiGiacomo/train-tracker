@@ -1,19 +1,21 @@
-const selectedTrainReducer = (state = 0, action) => {
-  switch(action.tyoe){
+const selectedTrainReducer = (state = [], action) => {
+  switch (action.type) {
     case 'SET_TRAIN':
-      return action.data
+      return state.concat(action.data);
     default:
-      return state
+      return state;
   }
-}
+};
 
-export const storeSelectedTrain = (selectedTrainNumber) => {
+export const storeSelectedTrain = (selectedTrain) => {
   return async dispatch => {
     dispatch({
       type: 'SET_TRAIN',
-      data: selectedTrainNumber
-    })
-  }
-}
+      data: selectedTrain,
+    });
+  };
+};
 
-export default selectedTrainReducer
+
+
+export default selectedTrainReducer;

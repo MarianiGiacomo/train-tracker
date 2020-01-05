@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -10,26 +10,48 @@ import trainIcon from '../utils/icons';
 
 import { storeSelectedTrain } from '../reducers/selectedTrainReducer';
 import { storeTrainLocation } from '../reducers/trainLocationReducer';
+import { storeMqttClient } from '../reducers/mqttClientReducer';
 import mqttService from '../services/mqttWwebsocket';
-import restService from '../services/rest';
 import helperFunctions from '../utils/helperFunctions';
 
 const AppContent = (props) => {
-  const { trainLocation, selectedTrainNumber, mqttClient } = props;
-
+  const {
+    trainLocation,
+    selectedTrains,
+    mqttClient,
+    storeMqttClient,
+    storeSelectedTrain,
+    storeTrainLocation,
+  } = props;
   const mapStyle = { height: 500, margin: '1% 20%' };
+  const date = helperFunctions.getFormattedDate(new Date());
 
-  const rowSelectionHandler = async (selectedRowKeys, selectedRows) => {
-    const oldTrain = selectedTrainNumber;
+  useEffect(() => {
+    const callBack = (message) => {
+      storeTrainLocation(
+        helperFunctions.extractTrainLocationWS(message),
+      );
+    };
+    const client = mqttService.getClient();
+    storeMqttClient(client);
+    mqttService.onMessage(client, callBack);
+    const cleanup = () => {
+      mqttService.closeConnection(client);
+    };
+    return cleanup;
+  }, [
+    storeMqttClient,
+    storeTrainLocation,
+  ]);
+
+  const rowSelectionHandler = (selectedRowNumber, selectedRows) => {
+    const oldTrain = selectedTrains[selectedTrains.length - 1] || 0;
     const newTrain = selectedRows[0].trainNumber;
-    await mqttService.changeSubscription(mqttClient, oldTrain, newTrain);
-    await props.storeSelectedTrain(newTrain);
-    updateTrainLocationOnce();
-  };
-
-  const updateTrainLocationOnce = async () => {
-    const newTrainLocation = await restService.getTrainLocation(selectedTrainNumber);
-    props.storeTrainLocation(helperFunctions.extractTrainLocation(newTrainLocation));
+    if (oldTrain) {
+      mqttService.unsubscribe(mqttClient, `${date}/${oldTrain}`);
+    }
+    mqttService.subscribe(mqttClient, `${date}/${newTrain}`);
+    storeSelectedTrain(newTrain);
   };
 
   return (
@@ -53,18 +75,23 @@ const AppContent = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  selectedTrainNumber: state.selectedTrainNumber,
+  selectedTrains: state.selectedTrains,
   trainLocation: state.trainLocation,
   mqttClient: state.mqttClient,
 });
 
 const mapDispatchToProps = {
+  storeMqttClient,
   storeSelectedTrain,
   storeTrainLocation,
 };
 
-// AppContent.propTypes = {
-
-// };
+AppContent.propTypes = {
+  trainLocation: PropTypes.objectOf(PropTypes.number).isRequired,
+  selectedTrains: PropTypes.arrayOf(PropTypes.number).isRequired,
+  storeMqttClient: PropTypes.func.isRequired,
+  storeSelectedTrain: PropTypes.func.isRequired,
+  storeTrainLocation: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContent);
