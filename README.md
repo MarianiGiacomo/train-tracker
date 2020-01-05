@@ -1,4 +1,4 @@
-# Live Train Geolocation with WebSocket and HTTP-REST
+# Live Train Geolocation with MQTT over WebSocket
 
 ## Steps to run the react app
 
