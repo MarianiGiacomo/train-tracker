@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 import { Table } from 'antd';
 
@@ -13,36 +13,37 @@ const tableHeaders = [
   {
     title: 'Departure Station',
     dataIndex: 'departureStation',
-    key: 'departureStation'
+    key: 'departureStation',
   },
   {
     title: 'Departure Time',
     dataIndex: 'departureTime',
-    key: 'departureTime'
+    key: 'departureTime',
   },
   {
     title: 'Arrival Station',
     dataIndex: 'arrivalStation',
-    key: 'arrivalStation'
+    key: 'arrivalStation',
   },
   {
     title: 'Arrival Time',
     dataIndex: 'arrivalTime',
-    key: 'arrivalTime'
-  }
+    key: 'arrivalTime',
+  },
 ];
 
 const TrainsComponent = props => {
-  const { trains } = props
+  const { trains, rowSelectionHandler } = props;
+
   const rowSelection = {
-    //onChange: this.rowSelectionHandler,
-    type: 'radio'
+    onChange: rowSelectionHandler,
+    type: 'radio',
   };
-  
+
   return (
     <div>
-      <Table 
-        dataSource={trains} 
+      <Table
+        dataSource={trains}
         columns={tableHeaders}
         rowSelection={rowSelection}/>
     </div>
@@ -50,15 +51,12 @@ const TrainsComponent = props => {
 };
 
 const mapStateToProps = (state) => {
-  return {
-    trains: state.trains
-  }
-}
+  return { trains: state.trains };
+};
 
 TrainsComponent.propTypes = {
-  selectedTrain: PropTypes.object,
-  trains: PropTypes.array,
-  tableHeaders: PropTypes.array
+  trains: PropTypes.arrayOf(PropTypes.object).isRequired,
+  rowSelectionHandler: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, null)(TrainsComponent);

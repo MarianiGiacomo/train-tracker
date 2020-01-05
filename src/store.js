@@ -1,12 +1,25 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
+import {
+  createStore, combineReducers, applyMiddleware, compose,
+} from 'redux';
+import thunk from 'redux-thunk';
 
-import trainsListReducer from './reducers/trainsListReducer'
+import {
+  selectedTrainReducer,
+  trainsListReducer,
+  trainLocationReducer,
+  mqttClientReducer,
+} from './reducers';
 
 const reducer = combineReducers({
-  trains: trainsListReducer
-})
+  trains: trainsListReducer,
+  selectedTrains: selectedTrainReducer,
+  trainLocation: trainLocationReducer,
+  mqttClient: mqttClientReducer,
+});
 
-const store = createStore(reducer, applyMiddleware(thunk))
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(reducer, /* preloadedState, */ composeEnhancers(
+  applyMiddleware(thunk),
+));
 
-export default store
+export default store;
