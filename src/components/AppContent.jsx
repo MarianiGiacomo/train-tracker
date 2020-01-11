@@ -23,7 +23,7 @@ const AppContent = (props) => {
     storeSelectedTrain,
     storeTrainLocation,
   } = props;
-  const mapStyle = { height: 500, margin: '1% 20%' };
+  let mapStyle = { height: 500, margin: '1% 20%' };
   const date = helperFunctions.getFormattedDate(new Date());
 
   useEffect(() => {
@@ -32,19 +32,23 @@ const AppContent = (props) => {
         helperFunctions.extractTrainLocationWS(message),
       );
     };
-    const client = mqttService.getClient();
-    storeMqttClient(client);
-    mqttService.onMessage(client, callBack);
-    const cleanup = () => {
+
+    const  cleanup = () => {
       mqttService.closeConnection(client);
     };
+
+    let client = mqttService.getClient();
+
+    storeMqttClient(client);
+    mqttService.onMessage(client, callBack);
     return cleanup;
   }, [
     storeMqttClient,
     storeTrainLocation,
   ]);
 
-  const rowSelectionHandler = (selectedRowNumber, selectedRows) => {
+
+  function rowSelectionHandler(selectedRowNumber, selectedRows) {
     const oldTrain = selectedTrains[selectedTrains.length - 1] || 0;
     const newTrain = selectedRows[0].trainNumber;
     if (oldTrain) {
@@ -52,7 +56,7 @@ const AppContent = (props) => {
     }
     mqttService.subscribe(mqttClient, `${date}/${newTrain}`);
     storeSelectedTrain(newTrain);
-  };
+  }
 
   return (
     <div>

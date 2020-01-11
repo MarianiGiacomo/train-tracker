@@ -16,7 +16,7 @@ const AppHeader = props => {
 };
 
 Header.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
 };
 
 export default AppHeader;

@@ -32,7 +32,7 @@ const tableHeaders = [
   },
 ];
 
-const TrainsComponent = props => {
+const TrainsComponent = (props) => {
   const { trains, rowSelectionHandler } = props;
 
   const rowSelection = {
@@ -45,14 +45,13 @@ const TrainsComponent = props => {
       <Table
         dataSource={trains}
         columns={tableHeaders}
-        rowSelection={rowSelection}/>
+        rowSelection={rowSelection}
+      />
     </div>
   );
 };
 
-const mapStateToProps = (state) => {
-  return { trains: state.trains };
-};
+const mapStateToProps = (state) => ({ trains: state.trains });
 
 TrainsComponent.propTypes = {
   trains: PropTypes.arrayOf(PropTypes.object).isRequired,

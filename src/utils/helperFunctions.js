@@ -2,14 +2,6 @@ import moment from 'moment-timezone';
 
 const addZeroToSingleDigit = (number) => (number.toString().length === 1 ? `0${number}` : number);
 
-// Format the given date as 'YYYY-MM-DD'
-const getFormattedDate = (date) => {
-  const year = date.getFullYear();
-  const month = addZeroToSingleDigit(date.getMonth() + 1);
-  const day = addZeroToSingleDigit(date.getDate());
-  return `${year}-${month}-${day}`;
-};
-
 const getStationName = (stationShortCode, stationMetadata) => {
   const station = stationMetadata.filter(
     (stationData) => stationData.stationShortCode === stationShortCode,
@@ -24,13 +16,22 @@ const getDepartureStation = (train, stationMetadata) => {
 const getTimezonedDate = (date) => moment.tz(date, 'Europe/Helsinki').format('YYYY-MM-DD HH:mm');
 
 const getArrivalStation = (train, stationMetadata) => {
-  getStationName(
+  return getStationName(
     train.timeTableRows[train.timeTableRows.length - 1].stationShortCode, stationMetadata,
   );
 };
 
+
+// Format the given date as 'YYYY-MM-DD'
+function getFormattedDate(date) {
+  const year = date.getFullYear();
+  const month = addZeroToSingleDigit(date.getMonth() + 1);
+  const day = addZeroToSingleDigit(date.getDate());
+  return `${year}-${month}-${day}`;
+}
+
 // Extract from full trains array the data needed for the trains table
-const getFormattedCurentlyRunningTrains = (trains, stationMetadata) => {
+function getFormattedCurentlyRunningTrains(trains, stationMetadata) {
   const reducedTrains = trains.filter((train) => train.runningCurrently).map((train, i) => ({
     key: i,
     trainNumber: train.trainNumber,
@@ -42,23 +43,23 @@ const getFormattedCurentlyRunningTrains = (trains, stationMetadata) => {
     ),
   }));
   return reducedTrains;
-};
+}
 
-const extractTrainLocationREST = (message) => {
+function extractTrainLocationREST(message) {
   const { coordinates } = message.data[0].location;
   return {
     lat: coordinates[1],
     lng: coordinates[0],
   };
-};
+}
 
-const extractTrainLocationWS = (message) => {
+function extractTrainLocationWS(message) {
   const { coordinates } = message.location;
   return {
     lat: coordinates[1],
     lng: coordinates[0],
   };
-};
+}
 
 const helperFunctions = {
   getFormattedDate,
