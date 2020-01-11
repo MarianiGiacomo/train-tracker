@@ -21,6 +21,16 @@ const getArrivalStation = (train, stationMetadata) => {
   );
 };
 
+const timeTableContainsStation = (stationShortCode, timeTableRows) => {
+  let stationMatch = false;
+  timeTableRows.forEach((row) => {
+    if (row.stationShortCode === stationShortCode) {
+      stationMatch = true;
+    }
+  });
+  return stationMatch;
+};
+
 
 // Format the given date as 'YYYY-MM-DD'
 function getFormattedDate(date) {
@@ -61,11 +71,19 @@ function extractTrainLocationWS(message) {
   };
 }
 
+function getTrainsWithGivenStation(stationName, trains, stationMetadata) {
+  return trains.filter((train) => {
+    const station = stationMetadata.find((station) => station.stationName === stationName);
+    return timeTableContainsStation(station.stationShortCode, train.timeTableRows);
+  });
+}
+
 const helperFunctions = {
   getFormattedDate,
   getFormattedCurentlyRunningTrains,
   extractTrainLocationREST,
   extractTrainLocationWS,
+  getTrainsWithGivenStation,
 };
 
 export default helperFunctions;

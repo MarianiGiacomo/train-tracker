@@ -4,14 +4,13 @@ import {
   render,
   cleanup,
 } from '@testing-library/react';
-import store from '../store'
-import AppContent from '../components/AppContent'
-
-
-afterEach(cleanup)
+import store from '../../store'
+import AppContent from '../../components/AppContent'
 
 describe('<AppContent />', () => {
-test('Contains MapComponent div', () => {
+  afterEach(cleanup);
+
+  test('Contains MapComponent div', () => {
     const { container } = render(
       <Provider store={store}>
         <AppContent />

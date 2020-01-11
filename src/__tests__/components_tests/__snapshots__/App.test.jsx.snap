@@ -1,0 +1,358 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> Test snapshot 1`] = `
+<div
+  class="content-wrapper"
+>
+  <div
+    class="header-component"
+  >
+    <div>
+      <header
+        class="header ant-layout-header"
+      >
+        <h2>
+          Train Tracker
+        </h2>
+      </header>
+    </div>
+  </div>
+  <div
+    class="content-component"
+  >
+    <div>
+      <div
+        class="map-component"
+      >
+        <div>
+          <div
+            class="map-element leaflet-container leaflet-grab leaflet-touch-drag"
+            style="height: 500px; margin: 1% 20%; position: relative;"
+            tabindex="0"
+          >
+            <div
+              class="leaflet-pane leaflet-map-pane"
+              style="left: 0px; top: 0px;"
+            >
+              <div
+                class="leaflet-pane leaflet-tile-pane"
+              >
+                <div
+                  class="leaflet-layer titleLayer-element"
+                  style="z-index: 1;"
+                >
+                  <div
+                    class="leaflet-tile-container leaflet-zoom-animated"
+                    style="left: 0px; top: 0px;"
+                  >
+                    <img
+                      alt=""
+                      class="leaflet-tile"
+                      role="presentation"
+                      src="https://b.tile.openstreetmap.org/15/18654/9484.png"
+                      style="width: 256px; height: 256px; left: -45px; top: -173px;"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="leaflet-pane leaflet-shadow-pane"
+              />
+              <div
+                class="leaflet-pane leaflet-overlay-pane"
+              />
+              <div
+                class="leaflet-pane leaflet-marker-pane"
+              >
+                <img
+                  alt=""
+                  class="leaflet-marker-icon leaflet-zoom-hide leaflet-interactive"
+                  src="https://upload.wikimedia.org/wikipedia/commons/1/18/Aiga_railtransportation.png"
+                  style="margin-left: -15px; margin-top: -20px; width: 30px; height: 40px; left: 0px; top: 0px; z-index: 0;"
+                  tabindex="0"
+                />
+              </div>
+              <div
+                class="leaflet-pane leaflet-tooltip-pane"
+              />
+              <div
+                class="leaflet-pane leaflet-popup-pane"
+              />
+            </div>
+            <div
+              class="leaflet-control-container"
+            >
+              <div
+                class="leaflet-top leaflet-left"
+              >
+                <div
+                  class="leaflet-control-zoom leaflet-bar leaflet-control"
+                >
+                  <a
+                    aria-label="Zoom in"
+                    class="leaflet-control-zoom-in"
+                    href="#"
+                    role="button"
+                    title="Zoom in"
+                  >
+                    +
+                  </a>
+                  <a
+                    aria-label="Zoom out"
+                    class="leaflet-control-zoom-out"
+                    href="#"
+                    role="button"
+                    title="Zoom out"
+                  >
+                    −
+                  </a>
+                </div>
+              </div>
+              <div
+                class="leaflet-top leaflet-right"
+              />
+              <div
+                class="leaflet-bottom leaflet-left"
+              />
+              <div
+                class="leaflet-bottom leaflet-right"
+              >
+                <div
+                  class="leaflet-control-attribution leaflet-control"
+                >
+                  <a
+                    href="https://leafletjs.com"
+                    title="A JS library for interactive maps"
+                  >
+                    Leaflet
+                  </a>
+                   | © 
+                  <a
+                    href="http://osm.org/copyright"
+                  >
+                    OpenStreetMap
+                  </a>
+                   contributors
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="search-component"
+      >
+        <div />
+      </div>
+      <div
+        class="trains-component"
+      >
+        <div>
+          <div
+            class="ant-table-wrapper"
+          >
+            <div
+              class="ant-spin-nested-loading"
+            >
+              <div
+                class="ant-spin-container"
+              >
+                <div
+                  class="ant-table ant-table-default ant-table-empty ant-table-scroll-position-left"
+                >
+                  <div
+                    class="ant-table-content"
+                  >
+                    <div
+                      class="ant-table-body"
+                    >
+                      <table
+                        class=""
+                      >
+                        <colgroup>
+                          <col
+                            class="ant-table-selection-col"
+                          />
+                          <col />
+                          <col />
+                          <col />
+                          <col />
+                          <col />
+                        </colgroup>
+                        <thead
+                          class="ant-table-thead"
+                        >
+                          <tr>
+                            <th
+                              class="ant-table-selection-column"
+                            >
+                              <span
+                                class="ant-table-header-column"
+                              >
+                                <div>
+                                  <span
+                                    class="ant-table-column-title"
+                                  />
+                                  <span
+                                    class="ant-table-column-sorter"
+                                  />
+                                </div>
+                              </span>
+                            </th>
+                            <th
+                              class=""
+                            >
+                              <span
+                                class="ant-table-header-column"
+                              >
+                                <div>
+                                  <span
+                                    class="ant-table-column-title"
+                                  >
+                                    Train Numner
+                                  </span>
+                                  <span
+                                    class="ant-table-column-sorter"
+                                  />
+                                </div>
+                              </span>
+                            </th>
+                            <th
+                              class=""
+                            >
+                              <span
+                                class="ant-table-header-column"
+                              >
+                                <div>
+                                  <span
+                                    class="ant-table-column-title"
+                                  >
+                                    Departure Station
+                                  </span>
+                                  <span
+                                    class="ant-table-column-sorter"
+                                  />
+                                </div>
+                              </span>
+                            </th>
+                            <th
+                              class=""
+                            >
+                              <span
+                                class="ant-table-header-column"
+                              >
+                                <div>
+                                  <span
+                                    class="ant-table-column-title"
+                                  >
+                                    Departure Time
+                                  </span>
+                                  <span
+                                    class="ant-table-column-sorter"
+                                  />
+                                </div>
+                              </span>
+                            </th>
+                            <th
+                              class=""
+                            >
+                              <span
+                                class="ant-table-header-column"
+                              >
+                                <div>
+                                  <span
+                                    class="ant-table-column-title"
+                                  >
+                                    Arrival Station
+                                  </span>
+                                  <span
+                                    class="ant-table-column-sorter"
+                                  />
+                                </div>
+                              </span>
+                            </th>
+                            <th
+                              class="ant-table-row-cell-last"
+                            >
+                              <span
+                                class="ant-table-header-column"
+                              >
+                                <div>
+                                  <span
+                                    class="ant-table-column-title"
+                                  >
+                                    Arrival Time
+                                  </span>
+                                  <span
+                                    class="ant-table-column-sorter"
+                                  />
+                                </div>
+                              </span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          class="ant-table-tbody"
+                        />
+                      </table>
+                    </div>
+                    <div
+                      class="ant-table-placeholder"
+                    >
+                      <div
+                        class="ant-empty ant-empty-normal"
+                      >
+                        <div
+                          class="ant-empty-image"
+                        >
+                          <svg
+                            height="41"
+                            viewBox="0 0 64 41"
+                            width="64"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g
+                              fill="none"
+                              fill-rule="evenodd"
+                              transform="translate(0 1)"
+                            >
+                              <ellipse
+                                cx="32"
+                                cy="33"
+                                fill="#F5F5F5"
+                                rx="32"
+                                ry="7"
+                              />
+                              <g
+                                fill-rule="nonzero"
+                                stroke="#D9D9D9"
+                              >
+                                <path
+                                  d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
+                                />
+                                <path
+                                  d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                                  fill="#FAFAFA"
+                                />
+                              </g>
+                            </g>
+                          </svg>
+                        </div>
+                        <p
+                          class="ant-empty-description"
+                        >
+                          No Data
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
