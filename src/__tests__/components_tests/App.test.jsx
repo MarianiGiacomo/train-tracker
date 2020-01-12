@@ -4,9 +4,9 @@ import {
   render,
   cleanup,
 } from '@testing-library/react';
-import store from '../store'
+import store from '../../store'
 
-import App from '../App'
+import App from '../../App'
 
 afterEach(() => {
   cleanup();
@@ -18,6 +18,8 @@ console.error = jest.fn();
 console.warn = jest.fn();
 
 describe('<App />', () => {
+  afterEach(cleanup);
+
   test('Test snapshot', () => {
       const { container } = render(
         <Provider store={store}>

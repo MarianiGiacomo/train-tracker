@@ -5,10 +5,12 @@ import {
 } from '@testing-library/react';
 import { getByRole } from '@testing-library/dom'
 
-import MapComponent from '../components/MapComponent'
-import trainIcon from '../utils/icons'
+import MapComponent from '../../components/MapComponent'
+import trainIcon from '../../utils/icons'
 
 describe('<MapComponent />', () =>  {
+  afterEach(cleanup);
+
   test('Map renders', () => {
     const mapCenter = { lat: 0, lng: 0}
     const style = { height:500, margin: '1% 20%' }

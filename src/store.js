@@ -5,16 +5,20 @@ import thunk from 'redux-thunk';
 
 import {
   selectedTrainReducer,
-  trainsListReducer,
+  allActiveTrainsReducer,
   trainLocationReducer,
   mqttClientReducer,
+  stationMedatadaReducer,
+  filteredActiveTrainsReducer,
 } from './reducers';
 
 const reducer = combineReducers({
-  trains: trainsListReducer,
+  trains: allActiveTrainsReducer,
   selectedTrains: selectedTrainReducer,
   trainLocation: trainLocationReducer,
   mqttClient: mqttClientReducer,
+  stationsMetadata: stationMedatadaReducer,
+  filteredTrains: filteredActiveTrainsReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

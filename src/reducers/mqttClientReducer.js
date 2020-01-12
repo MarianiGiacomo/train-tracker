@@ -7,7 +7,7 @@ const mqttClientReducer = (state = null, action) => {
   }
 };
 
-export const storeMqttClient = (client) => async (dispatch) => {
+export const storeMqttClientAction = (client) => async (dispatch) => {
   dispatch({
     type: 'CONNECT',
     data: client,

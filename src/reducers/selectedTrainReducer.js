@@ -7,7 +7,7 @@ const selectedTrainReducer = (state = [], action) => {
   }
 };
 
-export const storeSelectedTrain = (selectedTrain) => {
+export const storeSelectedTrainAction = (selectedTrain) => {
   return async dispatch => {
     dispatch({
       type: 'SET_TRAIN',

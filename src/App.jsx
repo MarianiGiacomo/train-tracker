@@ -7,15 +7,25 @@ import AppContent from './components/AppContent';
 
 import './style/App.css';
 
-import { storeTrainLocation } from './reducers/trainLocationReducer';
-import { getAndStoreActiveTrainsByDate } from './reducers/trainsListReducer';
+import { storeActiveTrainsAction } from './reducers/allActiveTrainsReducer';
+import { storestationsMetadataAction } from './reducers/stationsMetadataReducer';
+import helpers from './utils/helpers';
+import restService from './services/rest';
 
 const App = (props) => {
-  const { getAndStoreActiveTrainsByDate } = props;
+  const { storestationsMetadata, storeActiveTrains } = props;
+  const date = helpers.getFormattedDate(new Date());
+
+  async function fetchInitialData() {
+    const allTrains = await restService.getAllTrainsByDate(date);
+    const stationsMetadata = await restService.getstationsMetadata();
+    storestationsMetadata(stationsMetadata);
+    storeActiveTrains(helpers.filterTrains(allTrains, stationsMetadata));
+  }
 
   useEffect(() => {
-    getAndStoreActiveTrainsByDate(new Date());
-  }, [getAndStoreActiveTrainsByDate]);
+    fetchInitialData();
+  }, []);
 
   return (
     <div className="content-wrapper">
@@ -35,12 +45,13 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  getAndStoreActiveTrainsByDate,
-  storeTrainLocation,
+  storestationsMetadata: storestationsMetadataAction,
+  storeActiveTrains: storeActiveTrainsAction,
 };
 
 App.propTypes = {
-  getAndStoreActiveTrainsByDate: PropTypes.func.isRequired,
+  storestationsMetadata: PropTypes.func.isRequired,
+  storeActiveTrains: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

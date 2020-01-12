@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 import { Table } from 'antd';
 
@@ -51,11 +50,10 @@ const TrainsComponent = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({ trains: state.trains });
+// const mapStateToProps = (state) => ({ trains: state.trains });
 
 TrainsComponent.propTypes = {
-  trains: PropTypes.arrayOf(PropTypes.object).isRequired,
   rowSelectionHandler: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, null)(TrainsComponent);
+export default TrainsComponent;

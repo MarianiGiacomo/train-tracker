@@ -8,45 +8,56 @@ import TrainsComponent from './TrainsComponent';
 
 import trainIcon from '../utils/icons';
 
-import { storeSelectedTrain } from '../reducers/selectedTrainReducer';
-import { storeTrainLocation } from '../reducers/trainLocationReducer';
-import { storeMqttClient } from '../reducers/mqttClientReducer';
+import { storeSelectedTrainAction } from '../reducers/selectedTrainReducer';
+import { storeTrainLocationAction } from '../reducers/trainLocationReducer';
+import { storeMqttClientAction } from '../reducers/mqttClientReducer';
+import { storeFilteredTrainsAction } from '../reducers/filteredActiveTrainsReducer';
 import mqttService from '../services/mqttWwebsocket';
-import helperFunctions from '../utils/helperFunctions';
+import helpers from '../utils/helpers';
 
 const AppContent = (props) => {
   const {
+    stationsMetadata,
+    trains,
     trainLocation,
     selectedTrains,
+    filteredTrains,
     mqttClient,
     storeMqttClient,
     storeSelectedTrain,
     storeTrainLocation,
+    storeFilteredTrains,
   } = props;
-  let mapStyle = { height: 500, margin: '1% 20%' };
-  const date = helperFunctions.getFormattedDate(new Date());
+
+  const mapStyle = { height: 500, margin: '1% 20%' };
+  const searchFieldStyle = { width: 300 };
+
+  const date = helpers.getFormattedDate(new Date());
+  const stationNames = stationsMetadata.map((data) => data.stationName);
 
   useEffect(() => {
+    const client = mqttService.getClient();
+    storeMqttClient(client);
     const callBack = (message) => {
       storeTrainLocation(
-        helperFunctions.extractTrainLocationWS(message),
+        helpers.extractTrainLocationWS(message),
       );
     };
-
-    const  cleanup = () => {
-      mqttService.closeConnection(client);
-    };
-
-    let client = mqttService.getClient();
-
-    storeMqttClient(client);
     mqttService.onMessage(client, callBack);
-    return cleanup;
-  }, [
-    storeMqttClient,
-    storeTrainLocation,
-  ]);
+    return mqttService.closeConnection(client);
+  }, []);
 
+  function stationSelectionHandler(station) {
+    const trainsArray = helpers.getTrainsWithGivenStation(station, trains, stationsMetadata);
+    storeFilteredTrains(trainsArray);
+  }
+
+  // Show all trains if search field is emptied
+  function stationChangeHandler(value) {
+    if (value === undefined || !value.length) {
+      storeFilteredTrains([]);
+    }
+  }
 
   function rowSelectionHandler(selectedRowNumber, selectedRows) {
     const oldTrain = selectedTrains[selectedTrains.length - 1] || 0;
@@ -69,33 +80,50 @@ const AppContent = (props) => {
         />
       </div>
       <div className="search-component">
-        <SearchComponent />
+        <SearchComponent
+          style={searchFieldStyle}
+          dataSource={stationNames}
+          onSelect={stationSelectionHandler}
+          onChange={stationChangeHandler}
+        />
       </div>
       <div className="trains-component">
-        <TrainsComponent rowSelectionHandler={rowSelectionHandler} />
+        <TrainsComponent
+          rowSelectionHandler={rowSelectionHandler}
+          trains={filteredTrains.length ? filteredTrains : trains}
+        />
       </div>
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
+  stationsMetadata: state.stationsMetadata,
+  trains: state.trains,
   selectedTrains: state.selectedTrains,
   trainLocation: state.trainLocation,
+  filteredTrains: state.filteredTrains,
   mqttClient: state.mqttClient,
 });
 
 const mapDispatchToProps = {
-  storeMqttClient,
-  storeSelectedTrain,
-  storeTrainLocation,
+  storeMqttClient: storeMqttClientAction,
+  storeSelectedTrain: storeSelectedTrainAction,
+  storeTrainLocation: storeTrainLocationAction,
+  storeFilteredTrains: storeFilteredTrainsAction,
 };
 
 AppContent.propTypes = {
+  stationsMetadata: PropTypes.arrayOf(PropTypes.object).isRequired,
+  trains: PropTypes.arrayOf(PropTypes.object).isRequired,
+  filteredTrains: PropTypes.arrayOf(PropTypes.object).isRequired,
   trainLocation: PropTypes.objectOf(PropTypes.number).isRequired,
   selectedTrains: PropTypes.arrayOf(PropTypes.number).isRequired,
   storeMqttClient: PropTypes.func.isRequired,
   storeSelectedTrain: PropTypes.func.isRequired,
   storeTrainLocation: PropTypes.func.isRequired,
+  storeFilteredTrains: PropTypes.func.isRequired,
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContent);
