@@ -2,33 +2,23 @@ import moment from 'moment-timezone';
 
 const addZeroToSingleDigit = (number) => (number.toString().length === 1 ? `0${number}` : number);
 
-const getStationName = (stationShortCode, stationMetadata) => {
-  const station = stationMetadata.filter(
+const getStationName = (stationShortCode, stationsMetadata) => {
+  const station = stationsMetadata.filter(
     (stationData) => stationData.stationShortCode === stationShortCode,
   );
   return station[0].stationName;
 };
 
-const getDepartureStation = (train, stationMetadata) => {
-  return getStationName(train.timeTableRows[0].stationShortCode, stationMetadata);
+const getDepartureStation = (train, stationsMetadata) => {
+  return getStationName(train.timeTableRows[0].stationShortCode, stationsMetadata);
 };
 
 const getTimezonedDate = (date) => moment.tz(date, 'Europe/Helsinki').format('YYYY-MM-DD HH:mm');
 
-const getArrivalStation = (train, stationMetadata) => {
+const getArrivalStation = (train, stationsMetadata) => {
   return getStationName(
-    train.timeTableRows[train.timeTableRows.length - 1].stationShortCode, stationMetadata,
+    train.timeTableRows[train.timeTableRows.length - 1].stationShortCode, stationsMetadata,
   );
-};
-
-const timeTableContainsStation = (stationShortCode, timeTableRows) => {
-  let stationMatch = false;
-  timeTableRows.forEach((row) => {
-    if (row.stationShortCode === stationShortCode) {
-      stationMatch = true;
-    }
-  });
-  return stationMatch;
 };
 
 
@@ -41,13 +31,14 @@ function getFormattedDate(date) {
 }
 
 // Extract from full trains array the data needed for the trains table
-function getFormattedCurentlyRunningTrains(trains, stationMetadata) {
+function filterTrains(trains, stationsMetadata) {
   const reducedTrains = trains.filter((train) => train.runningCurrently).map((train, i) => ({
     key: i,
     trainNumber: train.trainNumber,
-    departureStation: getDepartureStation(train, stationMetadata),
+    timeTableRows: train.timeTableRows,
+    departureStation: getDepartureStation(train, stationsMetadata),
     departureTime: getTimezonedDate(train.timeTableRows[0].scheduledTime),
-    arrivalStation: getArrivalStation(train, stationMetadata),
+    arrivalStation: getArrivalStation(train, stationsMetadata),
     arrivalTime: getTimezonedDate(
       train.timeTableRows[train.timeTableRows.length - 1].scheduledTime,
     ),
@@ -71,19 +62,21 @@ function extractTrainLocationWS(message) {
   };
 }
 
-function getTrainsWithGivenStation(stationName, trains, stationMetadata) {
+function getTrainsWithGivenStation(stationName, trains, stationsMetadata) {
   return trains.filter((train) => {
-    const station = stationMetadata.find((station) => station.stationName === stationName);
-    return timeTableContainsStation(station.stationShortCode, train.timeTableRows);
+    const station = stationsMetadata.find((stationData) =>
+      // eslint-disable-next-line implicit-arrow-linebreak
+      stationData.stationName.toUpperCase() === stationName.toUpperCase());
+    return train.timeTableRows.some((row) => row.stationShortCode === station.stationShortCode);
   });
 }
 
-const helperFunctions = {
+const helpers = {
   getFormattedDate,
-  getFormattedCurentlyRunningTrains,
+  filterTrains,
   extractTrainLocationREST,
   extractTrainLocationWS,
   getTrainsWithGivenStation,
 };
 
-export default helperFunctions;
+export default helpers;

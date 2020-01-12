@@ -7,7 +7,7 @@ const trainLocationReducer = (state = {lat: 60.170605, lng: 24.940906}, action) 
   }
 }
 
-export const storeTrainLocation = (coordinates) => {
+export const storeTrainLocationAction = (coordinates) => {
   return async dispatch => {
     dispatch({
       type: 'SET_COORDINATES',

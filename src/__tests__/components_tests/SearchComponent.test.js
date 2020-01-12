@@ -2,15 +2,18 @@ import React from 'react';
 import {
   render,
   cleanup,
+  fireEvent
 } from '@testing-library/react';
 
+import helpers from '../../utils/helpers'
 import SearchComponent from '../../components/SearchComponent';
 
-describe('<SearchComponent />', () => {
-  afterEach(cleanup);
+afterEach(cleanup);
   
-  test('Search component renders', () => {
-    const { container } = render(<SearchComponent />);
-    
+describe('<SearchComponent />', () => {
+ 
+  test('Renders the correct placeholder', () => {
+    const { getByText } = render(<SearchComponent />);
+    expect(getByText('Search by station')).toBeTruthy();
   })
 })

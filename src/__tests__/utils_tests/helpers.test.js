@@ -1,4 +1,4 @@
-import helperFunctions from '../../utils/helperFunctions'
+import helpers from '../../utils/helpers'
 
 const trains = [
   {
@@ -49,19 +49,19 @@ const stationsMetadata = [
 describe('Tests for helper functions', () => {
   test('Return formatted date', () => {
     const dates = [ '2020-01-01', '2021-11-11', '2100-01-01' ];
-    const formattedDates = dates.map( d => helperFunctions.getFormattedDate(new Date(d)))
+    const formattedDates = dates.map( d => helpers.getFormattedDate(new Date(d)))
     formattedDates.forEach( (date, i) =>  expect(date).toBe(dates[i]));
   })
 
   test('Return formatted currently running trains', () => {
-    const result = helperFunctions.getFormattedCurentlyRunningTrains(trains, stationsMetadata)
+    const result = helpers.filterTrains(trains, stationsMetadata)
     expect(result.length).toBe(1)
     expect(result[0].trainNumber).toBe(2)
-    expect(Object.keys(result[0]).length).toBe(6)
+    expect(Object.keys(result[0]).length).toBe(7)
   })
 
   test('Return list of trains according to given station', () => {
-    const result = helperFunctions
+    const result = helpers
     .getTrainsWithGivenStation(
       stationsMetadata[0].stationName, 
       trains, 

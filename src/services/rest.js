@@ -9,14 +9,14 @@ async function getAllTrainsByDate(date) {
 }
 
 // List of all stations. Needed to map station short code to station full name
-async function getStationMetadata () {
+async function getstationsMetadata() {
   const response = await axios.get(`${baseUrl}/metadata/stations`);
   return response.data;
 }
 
 const restService = {
   getAllTrainsByDate,
-  getStationMetadata,
+  getstationsMetadata,
 };
 
 export default restService;
