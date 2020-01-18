@@ -1,14 +1,24 @@
 import mqtt from 'mqtt';
 
-const websocketUrl = 'wss://rata.digitraffic.fi:443/mqtt';
+const websocketUrl = 'wss://rata.digitraffi.fi:443/mqtt';
 const trainLocations = 'train-locations/';
 
-function getClient() {
-  return mqtt.connect(websocketUrl);
+function getClient(errorHandler) {
+  const client = mqtt.connect(websocketUrl);
+  client.stream.on('error', (err) => { 
+    errorHandler(`Connection to ${websocketUrl} failed`);
+    client.end();
+  });
+  return client;
 }
 
-function subscribe(client, topic) {
-  client.subscribe(trainLocations + topic);
+function subscribe(client, topic, errorHandler) {
+  const callBack = (err, granted) => {
+    if (err) {
+      errorHandler('Subscription request failed');
+    }
+  };
+  return client.subscribe(trainLocations + topic, callBack);
 }
 
 function onMessage(client, callBack) {

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Notification from './Notification';
 import MapComponent from './MapComponent';
 import SearchComponent from './SearchComponent';
 import TrainsComponent from './TrainsComponent';
@@ -12,6 +13,9 @@ import { storeSelectedTrainAction } from '../reducers/selectedTrainReducer';
 import { storeTrainLocationAction } from '../reducers/trainLocationReducer';
 import { storeMqttClientAction } from '../reducers/mqttClientReducer';
 import { storeFilteredTrainsAction } from '../reducers/filteredActiveTrainsReducer';
+import { storeMessageAction, clearMessageAction } from '../reducers/messageReducer';
+import { storeErrorAction } from '../reducers/errorReducer';
+
 import mqttService from '../services/mqttWwebsocket';
 import helpers from '../utils/helpers';
 
@@ -23,10 +27,15 @@ const AppContent = (props) => {
     selectedTrains,
     filteredTrains,
     mqttClient,
+    message,
+    errorMessage,
     storeMqttClient,
     storeSelectedTrain,
     storeTrainLocation,
     storeFilteredTrains,
+    storeMessage,
+    clearMessage,
+    storeError,
   } = props;
 
   const mapStyle = { height: 500, margin: '1% 20%' };
@@ -34,18 +43,21 @@ const AppContent = (props) => {
 
   const date = helpers.getFormattedDate(new Date());
   const stationNames = stationsMetadata.map((data) => data.stationName);
+  const waitPostionMessage = 'Waiting for train position update...'
 
   useEffect(() => {
-    const client = mqttService.getClient();
+    const client = mqttService.getClient(storeError);
     storeMqttClient(client);
-    const callBack = (message) => {
+    const callBack = (mqttMessage) => {
+      clearMessage(waitPostionMessage);
       storeTrainLocation(
-        helpers.extractTrainLocationWS(message),
+        helpers.extractTrainLocationWS(mqttMessage),
       );
     };
     mqttService.onMessage(client, callBack);
     return () => mqttService.closeConnection(client);
   }, []);
+
 
   function stationSelectionHandler(station) {
     const trainsArray = helpers.getTrainsWithGivenStation(station, trains, stationsMetadata);
@@ -65,12 +77,14 @@ const AppContent = (props) => {
     if (oldTrain) {
       mqttService.unsubscribe(mqttClient, `${date}/${oldTrain}`);
     }
-    mqttService.subscribe(mqttClient, `${date}/${newTrain}`);
+    storeMessage(waitPostionMessage);
+    mqttService.subscribe(mqttClient, `${date}/${newTrain}`, storeError);
     storeSelectedTrain(newTrain);
   }
 
   return (
     <div>
+      <Notification error={errorMessage} message={message}/>
       <div className="map-component">
         <MapComponent
           mapCenter={trainLocation}
@@ -104,6 +118,8 @@ const mapStateToProps = (state) => ({
   trainLocation: state.trainLocation,
   filteredTrains: state.filteredTrains,
   mqttClient: state.mqttClient,
+  message: state.message,
+  errorMessage: state.errorMessage,
 });
 
 const mapDispatchToProps = {
@@ -111,6 +127,9 @@ const mapDispatchToProps = {
   storeSelectedTrain: storeSelectedTrainAction,
   storeTrainLocation: storeTrainLocationAction,
   storeFilteredTrains: storeFilteredTrainsAction,
+  storeMessage: storeMessageAction,
+  clearMessage: clearMessageAction,
+  storeError: storeErrorAction,
 };
 
 AppContent.propTypes = {

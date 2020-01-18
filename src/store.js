@@ -10,6 +10,8 @@ import {
   mqttClientReducer,
   stationMedatadaReducer,
   filteredActiveTrainsReducer,
+  messageReducer,
+  errorReducer,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -19,6 +21,8 @@ const reducer = combineReducers({
   mqttClient: mqttClientReducer,
   stationsMetadata: stationMedatadaReducer,
   filteredTrains: filteredActiveTrainsReducer,
+  message: messageReducer,
+  errorMessage: errorReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

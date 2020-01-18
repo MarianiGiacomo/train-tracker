@@ -22,6 +22,9 @@ exports[`<App /> Test snapshot 1`] = `
   >
     <div>
       <div
+        class="modal"
+      />
+      <div
         class="map-component"
       >
         <div>
