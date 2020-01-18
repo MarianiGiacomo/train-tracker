@@ -44,7 +44,7 @@ const AppContent = (props) => {
       );
     };
     mqttService.onMessage(client, callBack);
-    return mqttService.closeConnection(client);
+    return () => mqttService.closeConnection(client);
   }, []);
 
   function stationSelectionHandler(station) {
